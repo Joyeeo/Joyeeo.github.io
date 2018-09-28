@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[anaconda-config]]></title>
+    <url>%2F2018%2F09%2F28%2Fanaconda-config%2F</url>
+    <content type="text"><![CDATA[Install anaconda on MacOS清华镜像站 1bash Anaconda3 Install cv21conda install -c menpo opencv]]></content>
+      <tags>
+        <tag>anaconda python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[pycaffe config]]></title>
+    <url>%2F2018%2F08%2F27%2Fpycaffe-config%2F</url>
+    <content type="text"><![CDATA[ProblemThere is always some trouble when we want use pycaffe and opencv at the same time :(12import caffeimport cv2 Solution We just do not use Anaconda!!!!! 123cd caffe/pythonfor req in $(cat requirements.txt); do pip install $req; donepip install opencv-python 12345678910111213141516import os.path as ospimport sysdef add_path(path): if path not in sys.path: sys.path.insert(0, path)caffe_path = '/home/zhaoxiandong/caffe'# Add caffe to PYTHONPATHcaffe_path = osp.join(caffe_path, 'python')add_path(caffe_path)import caffeimport cv2# successful !::::)))) Referenceshttps://github.com/NVIDIA/DIGITS/issues/156]]></content>
+      <tags>
+        <tag>pycaffe</tag>
+        <tag>caffe</tag>
+        <tag>opencv</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[PyTorch Begin]]></title>
+    <url>%2F2018%2F08%2F10%2FPyTorch-Begin%2F</url>
+    <content type="text"></content>
+      <tags>
+        <tag>PyTorch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[PyTorch Issues]]></title>
+    <url>%2F2018%2F08%2F10%2FPyTorch-Issues%2F</url>
+    <content type="text"></content>
+      <tags>
+        <tag>PyTorch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[ssh tunnel 端口转发]]></title>
+    <url>%2F2018%2F08%2F09%2Fssh-tunnel-%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%2F</url>
+    <content type="text"><![CDATA[Problem description A PC B 有公网IP的服务器或者工作站 C 和B在同一个局域网的机器 D 任意一台能联网的机器 我们想通过PC来连接B, C, D, 从而方便的来远程同步代码，和开启jupyter-notebook服务等。 ssh command主要用到了下边这条命令： 1ssh -N -f -L &lt;port2&gt;:&lt;ip1&gt;:&lt;port1&gt; &lt;username&gt;@&lt;ip&gt; N 在后台运行 f Fork into background after authentication. 后台认证用户密码，通常和-N连用，不用登录到远程主机。 L 本地起端口映射到其他机器 ExampleAccess server C on PC ARun on PC A:1ssh -N -f -L &lt;A.custom.port&gt;:&lt;C.local.ip&gt;:&lt;C.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt; Access server D on PC ARun on server D:1ssh -CfnNt -R &lt;B.custom.port&gt;:localhost:&lt;D.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt; Run on PC A:1ssh -N -f -L &lt;A.custom.port&gt;:localhost:&lt;B.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt; Reference梦溪博客]]></content>
+      <tags>
+        <tag>ssh tunnel</tag>
+        <tag>sublime</tag>
+        <tag>sftp</tag>
+        <tag>jupyter-notebook</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python argparse]]></title>
+    <url>%2F2018%2F08%2F08%2Fpython-argparse%2F</url>
+    <content type="text"><![CDATA[Usage1234import argparseparser= argparse.ArgumentParser()parser = argparse.ArgumentParser(description='')parser.add_argument('data', metavar='DIR', help='path to dataset') Parameter prog - The name of the program (default: sys.argv[0]) usage - The string describing the program usage (default: generated from arguments added to parser) description - Text to display before the argument help (default: none) epilog - Text to display after the argument help (default: none) parents - A list of ArgumentParser objects whose arguments should also be included formatter_class - A class for customizing the help output prefix_chars - The set of characters that prefix optional arguments (default: ‘-‘) fromfile_prefix_chars - The set of characters that prefix files from which additional arguments should be read (default: None) argument_default - The global default value for arguments (default: None) conflict_handler - The strategy for resolving conflicting optionals (usually unnecessary) add_help - Add a -h/–help option to the parser (default: True) allow_abbrev - Allows long options to be abbreviated if the abbreviation is unambiguous. (default: True) The add_augment() method name or flags - Either a name or a list of option strings, e.g. foo or -f, –foo. action - The basic type of action to be taken when this argument is encountered at the command line. nargs - The number of command-line arguments that should be consumed. const - A constant value required by some action and nargs selections. default - The value produced if the argument is absent from the command line. type - The type to which the command-line argument should be converted. choices - A container of the allowable values for the argument. required - Whether or not the command-line option may be omitted (optionals only). help - A brief description of what the argument does. metavar - A name for the argument in usage messages. 有助于提醒用户，该命令行参数所期待的参数，如 metavar=”mode” dest - The name of the attribute to be added to the object returned by parse_args(). ReferencePython 命令行解析python.org]]></content>
+      <tags>
+        <tag>python</tag>
+        <tag>argparse</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[test]]></title>
+    <url>%2F2018%2F08%2F07%2Ftest%2F</url>
+    <content type="text"><![CDATA[test $$\begin{eqnarray}\nabla\cdot\vec{E} &amp;=&amp; \frac{\rho}{\epsilon_0} \\\nabla\cdot\vec{B} &amp;=&amp; 0 \\\nabla\times\vec{E} &amp;=&amp; -\frac{\partial B}{\partial t} \\\nabla\times\vec{B} &amp;=&amp; \mu_0\left(\vec{J}+\epsilon_0\frac{\partial E}{\partial t} \right)\end{eqnarray}$$]]></content>
+  </entry>
+  <entry>
+    <title><![CDATA[Hello World]]></title>
+    <url>%2F2018%2F08%2F07%2Fhello-world%2F</url>
+    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
+  </entry>
+</search>
