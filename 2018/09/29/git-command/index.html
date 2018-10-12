@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="pycaffe,caffe,opencv," />
+  <meta name="keywords" content="git," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="ProblemThere is always some trouble when we want use pycaffe and opencv at the same time :(12import caffeimport cv2 Solution We just do not use Anaconda!!!!!  123cd caffe/pythonfor req in $(cat requir">
-<meta name="keywords" content="pycaffe,caffe,opencv">
+<meta name="description" content="Git commandupdate a forked repo from remote repo.123456789git remote add upstream git@github.com:&amp;lt;custom&amp;gt;.gitgit remote -vgit fetch upstreamgit merge upstream/mastergit push git 合并多个commits合并多个">
+<meta name="keywords" content="git">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pycaffe config ">
-<meta property="og:url" content="http://joyeeo.github.io/2018/08/27/pycaffe-config/index.html">
+<meta property="og:title" content="git-command">
+<meta property="og:url" content="http://joyeeo.github.io/2018/09/29/git-command/index.html">
 <meta property="og:site_name" content="Joey&#39;s note">
-<meta property="og:description" content="ProblemThere is always some trouble when we want use pycaffe and opencv at the same time :(12import caffeimport cv2 Solution We just do not use Anaconda!!!!!  123cd caffe/pythonfor req in $(cat requir">
+<meta property="og:description" content="Git commandupdate a forked repo from remote repo.123456789git remote add upstream git@github.com:&amp;lt;custom&amp;gt;.gitgit remote -vgit fetch upstreamgit merge upstream/mastergit push git 合并多个commits合并多个">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-27T08:15:21.000Z">
+<meta property="og:updated_time" content="2018-09-29T09:41:40.583Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="pycaffe config ">
-<meta name="twitter:description" content="ProblemThere is always some trouble when we want use pycaffe and opencv at the same time :(12import caffeimport cv2 Solution We just do not use Anaconda!!!!!  123cd caffe/pythonfor req in $(cat requir">
+<meta name="twitter:title" content="git-command">
+<meta name="twitter:description" content="Git commandupdate a forked repo from remote repo.123456789git remote add upstream git@github.com:&amp;lt;custom&amp;gt;.gitgit remote -vgit fetch upstreamgit merge upstream/mastergit push git 合并多个commits合并多个">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://joyeeo.github.io/2018/08/27/pycaffe-config/"/>
+  <link rel="canonical" href="http://joyeeo.github.io/2018/09/29/git-command/"/>
 
 
 
 
 
-  <title>pycaffe config  | Joey's note</title>
+  <title>git-command | Joey's note</title>
   
 
 
@@ -287,7 +287,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joyeeo.github.io/2018/08/27/pycaffe-config/">
+    <link itemprop="mainEntityOfPage" href="http://joyeeo.github.io/2018/09/29/git-command/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="hustzxd">
@@ -304,7 +304,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">pycaffe config </h1>
+          <h1 class="post-title" itemprop="name headline">git-command</h1>
         
 
         <div class="post-meta">
@@ -316,8 +316,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-27T16:03:24+08:00">
-                2018-08-27
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-29T17:09:02+08:00">
+                2018-09-29
               </time>
             
 
@@ -335,9 +335,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/08/27/pycaffe-config/#comments" itemprop="discussionUrl">
+                <a href="/2018/09/29/git-command/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/08/27/pycaffe-config/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/09/29/git-command/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -365,13 +365,8 @@
       
 
       
-        <h1 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h1><p>There is always some trouble when we want use <code>pycaffe</code> and <code>opencv</code> at the same time :(<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line"><span class="keyword">import</span> cv2</span><br></pre></td></tr></table></figure></p>
-<h1 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h1><blockquote>
-<p>We just do not use Anaconda!!!!!</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> caffe/python</span><br><span class="line"><span class="keyword">for</span> req <span class="keyword">in</span> $(cat requirements.txt); <span class="keyword">do</span> pip install <span class="variable">$req</span>; <span class="keyword">done</span></span><br><span class="line">pip install opencv-python</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os.path <span class="keyword">as</span> osp</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_path</span><span class="params">(path)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> path <span class="keyword">not</span> <span class="keyword">in</span> sys.path:</span><br><span class="line">        sys.path.insert(<span class="number">0</span>, path)</span><br><span class="line"></span><br><span class="line">caffe_path = <span class="string">'/home/zhaoxiandong/caffe'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Add caffe to PYTHONPATH</span></span><br><span class="line">caffe_path = osp.join(caffe_path, <span class="string">'python'</span>)</span><br><span class="line">add_path(caffe_path)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="comment"># successful !::::))))</span></span><br></pre></td></tr></table></figure>
-<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p><a href="https://github.com/NVIDIA/DIGITS/issues/156" target="_blank" rel="noopener">https://github.com/NVIDIA/DIGITS/issues/156</a></p>
+        <h1 id="Git-command"><a href="#Git-command" class="headerlink" title="Git command"></a>Git command</h1><h2 id="update-a-forked-repo-from-remote-repo"><a href="#update-a-forked-repo-from-remote-repo" class="headerlink" title="update a forked repo from remote repo."></a>update a forked repo from remote repo.</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">git remote add upstream git@github.com:&lt;custom&gt;.git</span><br><span class="line"></span><br><span class="line">git remote -v</span><br><span class="line"></span><br><span class="line">git fetch upstream</span><br><span class="line"></span><br><span class="line">git merge upstream/master</span><br><span class="line"></span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+<h2 id="git-合并多个commits"><a href="#git-合并多个commits" class="headerlink" title="git 合并多个commits"></a>git 合并多个commits</h2><p><a href="https://www.jianshu.com/p/964de879904a" target="_blank" rel="noopener">合并多个 Commit</a></p>
 
       
     </div>
@@ -389,11 +384,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/pycaffe/" rel="tag"># pycaffe</a>
-          
-            <a href="/tags/caffe/" rel="tag"># caffe</a>
-          
-            <a href="/tags/opencv/" rel="tag"># opencv</a>
+            <a href="/tags/git/" rel="tag"># git</a>
           
         </div>
       
@@ -406,8 +397,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/10/PyTorch-Begin/" rel="next" title="PyTorch Begin">
-                <i class="fa fa-chevron-left"></i> PyTorch Begin
+              <a href="/2018/09/28/anaconda-config/" rel="next" title="anaconda-config">
+                <i class="fa fa-chevron-left"></i> anaconda-config
               </a>
             
           </div>
@@ -415,10 +406,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/28/anaconda-config/" rel="prev" title="anaconda-config">
-                anaconda-config <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -555,7 +542,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Problem"><span class="nav-number">1.</span> <span class="nav-text">Problem</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solution"><span class="nav-number">2.</span> <span class="nav-text">Solution</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">3.</span> <span class="nav-text">References</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Git-command"><span class="nav-number">1.</span> <span class="nav-text">Git command</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#update-a-forked-repo-from-remote-repo"><span class="nav-number">1.1.</span> <span class="nav-text">update a forked repo from remote repo.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-合并多个commits"><span class="nav-number">1.2.</span> <span class="nav-text">git 合并多个commits</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -725,9 +712,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://joyeeo.github.io/2018/08/27/pycaffe-config/';
-          this.page.identifier = '2018/08/27/pycaffe-config/';
-          this.page.title = 'pycaffe config ';
+          this.page.url = 'http://joyeeo.github.io/2018/09/29/git-command/';
+          this.page.identifier = '2018/09/29/git-command/';
+          this.page.title = 'git-command';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://joyee.disqus.com/embed.js';

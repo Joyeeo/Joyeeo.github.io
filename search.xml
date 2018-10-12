@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[git-command]]></title>
+    <url>%2F2018%2F09%2F29%2Fgit-command%2F</url>
+    <content type="text"><![CDATA[Git commandupdate a forked repo from remote repo.123456789git remote add upstream git@github.com:&lt;custom&gt;.gitgit remote -vgit fetch upstreamgit merge upstream/mastergit push git 合并多个commits合并多个 Commit]]></content>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[anaconda-config]]></title>
     <url>%2F2018%2F09%2F28%2Fanaconda-config%2F</url>
     <content type="text"><![CDATA[Install anaconda on MacOS清华镜像站 1bash Anaconda3 Install cv21conda install -c menpo opencv]]></content>
