@@ -1,160 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-    
-    <entry>
-      <title>git-command</title>
-      <link href="/2018/09/29/git-command/"/>
-      <url>/2018/09/29/git-command/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Git-command"><a href="#Git-command" class="headerlink" title="Git command"></a>Git command</h1><h2 id="update-a-forked-repo-from-remote-repo"><a href="#update-a-forked-repo-from-remote-repo" class="headerlink" title="update a forked repo from remote repo."></a>update a forked repo from remote repo.</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">git remote add upstream git@github.com:&lt;custom&gt;.git</span><br><span class="line"></span><br><span class="line">git remote -v</span><br><span class="line"></span><br><span class="line">git fetch upstream</span><br><span class="line"></span><br><span class="line">git merge upstream/master</span><br><span class="line"></span><br><span class="line">git push</span><br></pre></td></tr></table></figure><h2 id="git-合并多个commits"><a href="#git-合并多个commits" class="headerlink" title="git 合并多个commits"></a>git 合并多个commits</h2><p><a href="https://www.jianshu.com/p/964de879904a" target="_blank" rel="noopener">合并多个 Commit</a></p><h2 id="git拉取远程分支到本地"><a href="#git拉取远程分支到本地" class="headerlink" title="git拉取远程分支到本地"></a>git拉取远程分支到本地</h2><h3 id="查看远程分支"><a href="#查看远程分支" class="headerlink" title="查看远程分支"></a>查看远程分支</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -r</span><br></pre></td></tr></table></figure><h3 id="拉取远程分支到本地分支"><a href="#拉取远程分支到本地分支" class="headerlink" title="拉取远程分支到本地分支"></a>拉取远程分支到本地分支</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b 本地分支名x origin/远程分支名x</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> git </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>anaconda-config</title>
-      <link href="/2018/09/28/anaconda-config/"/>
-      <url>/2018/09/28/anaconda-config/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Install-anaconda-on-MacOS"><a href="#Install-anaconda-on-MacOS" class="headerlink" title="Install anaconda on MacOS"></a>Install anaconda on MacOS</h1><p><a href="https://mirrors.tuna.tsinghua.edu.cn/#" target="_blank" rel="noopener">清华镜像站</a></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash Anaconda3</span><br></pre></td></tr></table></figure><h1 id="Install-cv2"><a href="#Install-cv2" class="headerlink" title="Install cv2"></a>Install cv2</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install -c menpo opencv</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> anaconda python </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>pycaffe config </title>
-      <link href="/2018/08/27/pycaffe-config/"/>
-      <url>/2018/08/27/pycaffe-config/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h1><p>There is always some trouble when we want use <code>pycaffe</code> and <code>opencv</code> at the same time :(<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line"><span class="keyword">import</span> cv2</span><br></pre></td></tr></table></figure></p><h1 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h1><blockquote><p>We just do not use Anaconda!!!!!</p></blockquote><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> caffe/python</span><br><span class="line"><span class="keyword">for</span> req <span class="keyword">in</span> $(cat requirements.txt); <span class="keyword">do</span> pip install <span class="variable">$req</span>; <span class="keyword">done</span></span><br><span class="line">pip install opencv-python</span><br></pre></td></tr></table></figure><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os.path <span class="keyword">as</span> osp</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_path</span><span class="params">(path)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> path <span class="keyword">not</span> <span class="keyword">in</span> sys.path:</span><br><span class="line">        sys.path.insert(<span class="number">0</span>, path)</span><br><span class="line"></span><br><span class="line">caffe_path = <span class="string">'/home/zhaoxiandong/caffe'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Add caffe to PYTHONPATH</span></span><br><span class="line">caffe_path = osp.join(caffe_path, <span class="string">'python'</span>)</span><br><span class="line">add_path(caffe_path)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="comment"># successful !::::))))</span></span><br></pre></td></tr></table></figure><h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p><a href="https://github.com/NVIDIA/DIGITS/issues/156" target="_blank" rel="noopener">https://github.com/NVIDIA/DIGITS/issues/156</a></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> pycaffe </tag>
-            
-            <tag> caffe </tag>
-            
-            <tag> opencv </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>PyTorch Begin</title>
-      <link href="/2018/08/10/PyTorch-Begin/"/>
-      <url>/2018/08/10/PyTorch-Begin/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> PyTorch </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>PyTorch Issues</title>
-      <link href="/2018/08/10/PyTorch-Issues/"/>
-      <url>/2018/08/10/PyTorch-Issues/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> PyTorch </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>ssh tunnel 端口转发</title>
-      <link href="/2018/08/09/ssh-tunnel-%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
-      <url>/2018/08/09/ssh-tunnel-%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Problem-description"><a href="#Problem-description" class="headerlink" title="Problem description"></a>Problem description</h1><ul><li><strong>A</strong> PC</li><li><strong>B</strong> 有公网IP的服务器或者工作站</li><li><strong>C</strong> 和<strong>B</strong>在同一个局域网的机器</li><li><strong>D</strong> 任意一台能联网的机器</li></ul><p>我们想通过PC来连接<strong>B</strong>, <strong>C</strong>, <strong>D</strong>, 从而方便的来远程同步代码，和开启jupyter-notebook服务等。</p><h1 id="ssh-command"><a href="#ssh-command" class="headerlink" title="ssh command"></a>ssh command</h1><p>主要用到了下边这条命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -N -f -L &lt;port2&gt;:&lt;ip1&gt;:&lt;port1&gt; &lt;username&gt;@&lt;ip&gt;</span><br></pre></td></tr></table></figure><ul><li><strong>N</strong> 在后台运行</li><li><strong>f</strong> Fork into background after authentication. 后台认证用户密码，通常和-N连用，不用登录到远程主机。</li><li><strong>L</strong> 本地起端口映射到其他机器</li></ul><h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><h2 id="Access-server-C-on-PC-A"><a href="#Access-server-C-on-PC-A" class="headerlink" title="Access server C on PC A"></a>Access server C on PC A</h2><p>Run on PC A:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -N -f -L &lt;A.custom.port&gt;:&lt;C.local.ip&gt;:&lt;C.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt;</span><br></pre></td></tr></table></figure></p><h2 id="Access-server-D-on-PC-A"><a href="#Access-server-D-on-PC-A" class="headerlink" title="Access server D on PC A"></a>Access server D on PC A</h2><p>Run on server D:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -CfnNt -R &lt;B.custom.port&gt;:localhost:&lt;D.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt;</span><br></pre></td></tr></table></figure></p><p>Run on PC A:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -N -f -L &lt;A.custom.port&gt;:localhost:&lt;B.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt;</span><br></pre></td></tr></table></figure></p><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="http://blog.creke.net/722.html" target="_blank" rel="noopener">梦溪博客</a></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> ssh tunnel </tag>
-            
-            <tag> sublime </tag>
-            
-            <tag> sftp </tag>
-            
-            <tag> jupyter-notebook </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>python argparse</title>
-      <link href="/2018/08/08/python-argparse/"/>
-      <url>/2018/08/08/python-argparse/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser= argparse.ArgumentParser()</span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">''</span>)</span><br><span class="line">parser.add_argument(<span class="string">'data'</span>, metavar=<span class="string">'DIR'</span>, help=<span class="string">'path to dataset'</span>)</span><br></pre></td></tr></table></figure><h2 id="Parameter"><a href="#Parameter" class="headerlink" title="Parameter"></a>Parameter</h2><ul><li>prog - The name of the program (default: sys.argv[0])</li><li>usage - The string describing the program usage (default: generated from arguments added to parser)</li><li>description - Text to display before the argument help (default: none)</li><li>epilog - Text to display after the argument help (default: none)</li><li>parents - A list of ArgumentParser objects whose arguments should also be included</li><li>formatter_class - A class for customizing the help output</li><li>prefix_chars - The set of characters that prefix optional arguments (default: ‘-‘)</li><li>fromfile_prefix_chars - The set of characters that prefix files from which additional arguments should be read (default: None)</li><li>argument_default - The global default value for arguments (default: None)</li><li>conflict_handler - The strategy for resolving conflicting optionals (usually unnecessary)</li><li>add_help - Add a -h/–help option to the parser (default: True)</li><li>allow_abbrev - Allows long options to be abbreviated if the abbreviation is unambiguous. (default: True)</li></ul><h2 id="The-add-augment-method"><a href="#The-add-augment-method" class="headerlink" title="The add_augment() method"></a>The add_augment() method</h2><ul><li>name or flags - Either a name or a list of option strings, e.g. foo or -f, –foo.</li><li>action - The basic type of action to be taken when this argument is encountered at the command line.</li><li>nargs - The number of command-line arguments that should be consumed.</li><li>const - A constant value required by some action and nargs selections.</li><li>default - The value produced if the argument is absent from the command line.</li><li>type - The type to which the command-line argument should be converted.</li><li>choices - A container of the allowable values for the argument.</li><li>required - Whether or not the command-line option may be omitted (optionals only).</li><li>help - A brief description of what the argument does.</li><li>metavar - A name for the argument in usage messages. 有助于提醒用户，该命令行参数所期待的参数，如 metavar=”mode”</li><li>dest - The name of the attribute to be added to the object returned by parse_args().</li></ul><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://blog.csdn.net/itlance_ouyang/article/details/52489674" target="_blank" rel="noopener">Python 命令行解析</a><br><a href="https://docs.python.org/3/library/argparse.html" target="_blank" rel="noopener">python.org</a></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> python </tag>
-            
-            <tag> argparse </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>test</title>
-      <link href="/2018/08/07/test/"/>
-      <url>/2018/08/07/test/</url>
-      
-        <content type="html"><![CDATA[<h1 id="test"><a href="#test" class="headerlink" title="test"></a>test</h1><p><img src="test.jpg" alt="test"></p><p>$$<br>\begin{eqnarray}<br>\nabla\cdot\vec{E} &amp;=&amp; \frac{\rho}{\epsilon_0} \\<br>\nabla\cdot\vec{B} &amp;=&amp; 0 \\<br>\nabla\times\vec{E} &amp;=&amp; -\frac{\partial B}{\partial t} \\<br>\nabla\times\vec{B} &amp;=&amp; \mu_0\left(\vec{J}+\epsilon_0\frac{\partial E}{\partial t} \right)<br>\end{eqnarray}<br>$$</p>]]></content>
-      
-      
-      
-    </entry>
-    
-    <entry>
-      <title>Hello World</title>
-      <link href="/2018/08/07/hello-world/"/>
-      <url>/2018/08/07/hello-world/</url>
-      
-        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
-      
-      
-      
-    </entry>
-    
-  
-  
+<search>
+  <entry>
+    <title><![CDATA[install-cuda]]></title>
+    <url>%2F2018%2F10%2F18%2Finstall-cuda%2F</url>
+    <content type="text"><![CDATA[Update /etc/apt/source.listBase software12345678sudo apt-get install vimsudo apt-get install screensudo apt-get install gitsudo apt-get install zshsh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"sudo apt-get install htopsudo apt-get install graphvizsudo apt-get install unrar CUDA9.01234567891011121314cd /home/ict/Downloads/cuda9# nvidia-driversudo dpkg -i nvidia-driver-local-repo-ubuntu1604-387.34_1.0-1_amd64.debsudo apt-get updatesudo apt-get install cuda-driverssudo reboot# cuda9.0cd /home/ict/Downloads/cuda9sudo dpkg -i cuda-repo-ubuntu1604-9-0-local_9.0.176-1_amd64-debsudo apt-get updatesudo apt-get install cuda# cudnnsudo dpkg -i libcudnn7-dev_7.1.3.16-1+cuda9.0_amd64.debsudo dpkg -i libcudnn7_7.1.3.16-1+cuda9.0_amd64.deb Remove CUDA1sudo apt-get --purge remove "nvidia-*"]]></content>
+      <tags>
+        <tag>cuda</tag>
+        <tag>nvidia-driver</tag>
+        <tag>ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[git-command]]></title>
+    <url>%2F2018%2F09%2F29%2Fgit-command%2F</url>
+    <content type="text"><![CDATA[Git commandupdate a forked repo from remote repo.123456789git remote add upstream git@github.com:&lt;custom&gt;.gitgit remote -vgit fetch upstreamgit merge upstream/mastergit push git 合并多个commits合并多个 Commit git拉取远程分支到本地查看远程分支1git branch -r 拉取远程分支到本地分支1git checkout -b 本地分支名x origin/远程分支名x]]></content>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[anaconda-config]]></title>
+    <url>%2F2018%2F09%2F28%2Fanaconda-config%2F</url>
+    <content type="text"><![CDATA[Install anaconda on MacOS清华镜像站 1bash Anaconda3 Install cv21conda install -c menpo opencv]]></content>
+      <tags>
+        <tag>anaconda python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[pycaffe config]]></title>
+    <url>%2F2018%2F08%2F27%2Fpycaffe-config%2F</url>
+    <content type="text"><![CDATA[ProblemThere is always some trouble when we want use pycaffe and opencv at the same time :(12import caffeimport cv2 Solution We just do not use Anaconda!!!!! 123cd caffe/pythonfor req in $(cat requirements.txt); do pip install $req; donepip install opencv-python 12345678910111213141516import os.path as ospimport sysdef add_path(path): if path not in sys.path: sys.path.insert(0, path)caffe_path = '/home/zhaoxiandong/caffe'# Add caffe to PYTHONPATHcaffe_path = osp.join(caffe_path, 'python')add_path(caffe_path)import caffeimport cv2# successful !::::)))) Referenceshttps://github.com/NVIDIA/DIGITS/issues/156]]></content>
+      <tags>
+        <tag>pycaffe</tag>
+        <tag>caffe</tag>
+        <tag>opencv</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[PyTorch Begin]]></title>
+    <url>%2F2018%2F08%2F10%2FPyTorch-Begin%2F</url>
+    <content type="text"></content>
+      <tags>
+        <tag>PyTorch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[PyTorch Issues]]></title>
+    <url>%2F2018%2F08%2F10%2FPyTorch-Issues%2F</url>
+    <content type="text"></content>
+      <tags>
+        <tag>PyTorch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[ssh tunnel 端口转发]]></title>
+    <url>%2F2018%2F08%2F09%2Fssh-tunnel-%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%2F</url>
+    <content type="text"><![CDATA[Problem description A PC B 有公网IP的服务器或者工作站 C 和B在同一个局域网的机器 D 任意一台能联网的机器 我们想通过PC来连接B, C, D, 从而方便的来远程同步代码，和开启jupyter-notebook服务等。 ssh command主要用到了下边这条命令： 1ssh -N -f -L &lt;port2&gt;:&lt;ip1&gt;:&lt;port1&gt; &lt;username&gt;@&lt;ip&gt; N 在后台运行 f Fork into background after authentication. 后台认证用户密码，通常和-N连用，不用登录到远程主机。 L 本地起端口映射到其他机器 ExampleAccess server C on PC ARun on PC A:1ssh -N -f -L &lt;A.custom.port&gt;:&lt;C.local.ip&gt;:&lt;C.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt; Access server D on PC ARun on server D:1ssh -CfnNt -R &lt;B.custom.port&gt;:localhost:&lt;D.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt; Run on PC A:1ssh -N -f -L &lt;A.custom.port&gt;:localhost:&lt;B.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt; Reference梦溪博客]]></content>
+      <tags>
+        <tag>ssh tunnel</tag>
+        <tag>sublime</tag>
+        <tag>sftp</tag>
+        <tag>jupyter-notebook</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python argparse]]></title>
+    <url>%2F2018%2F08%2F08%2Fpython-argparse%2F</url>
+    <content type="text"><![CDATA[Usage1234import argparseparser= argparse.ArgumentParser()parser = argparse.ArgumentParser(description='')parser.add_argument('data', metavar='DIR', help='path to dataset') Parameter prog - The name of the program (default: sys.argv[0]) usage - The string describing the program usage (default: generated from arguments added to parser) description - Text to display before the argument help (default: none) epilog - Text to display after the argument help (default: none) parents - A list of ArgumentParser objects whose arguments should also be included formatter_class - A class for customizing the help output prefix_chars - The set of characters that prefix optional arguments (default: ‘-‘) fromfile_prefix_chars - The set of characters that prefix files from which additional arguments should be read (default: None) argument_default - The global default value for arguments (default: None) conflict_handler - The strategy for resolving conflicting optionals (usually unnecessary) add_help - Add a -h/–help option to the parser (default: True) allow_abbrev - Allows long options to be abbreviated if the abbreviation is unambiguous. (default: True) The add_augment() method name or flags - Either a name or a list of option strings, e.g. foo or -f, –foo. action - The basic type of action to be taken when this argument is encountered at the command line. nargs - The number of command-line arguments that should be consumed. const - A constant value required by some action and nargs selections. default - The value produced if the argument is absent from the command line. type - The type to which the command-line argument should be converted. choices - A container of the allowable values for the argument. required - Whether or not the command-line option may be omitted (optionals only). help - A brief description of what the argument does. metavar - A name for the argument in usage messages. 有助于提醒用户，该命令行参数所期待的参数，如 metavar=”mode” dest - The name of the attribute to be added to the object returned by parse_args(). ReferencePython 命令行解析python.org]]></content>
+      <tags>
+        <tag>python</tag>
+        <tag>argparse</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[test]]></title>
+    <url>%2F2018%2F08%2F07%2Ftest%2F</url>
+    <content type="text"><![CDATA[test $$\begin{eqnarray}\nabla\cdot\vec{E} &amp;=&amp; \frac{\rho}{\epsilon_0} \\\nabla\cdot\vec{B} &amp;=&amp; 0 \\\nabla\times\vec{E} &amp;=&amp; -\frac{\partial B}{\partial t} \\\nabla\times\vec{B} &amp;=&amp; \mu_0\left(\vec{J}+\epsilon_0\frac{\partial E}{\partial t} \right)\end{eqnarray}$$]]></content>
+  </entry>
+  <entry>
+    <title><![CDATA[Hello World]]></title>
+    <url>%2F2018%2F08%2F07%2Fhello-world%2F</url>
+    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
+  </entry>
 </search>
