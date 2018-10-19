@@ -1170,6 +1170,7 @@
 <li><strong>C</strong> 和<strong>B</strong>在同一个局域网的机器</li>
 <li><strong>D</strong> 任意一台能联网的机器</li>
 </ul>
+<p><img src="ssh_tunnel.png" alt="img"></p>
 <p>我们想通过PC来连接<strong>B</strong>, <strong>C</strong>, <strong>D</strong>, 从而方便的来远程同步代码，和开启jupyter-notebook服务等。</p>
 <h1 id="ssh-command"><a href="#ssh-command" class="headerlink" title="ssh command"></a>ssh command</h1><p>主要用到了下边这条命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -N -f -L &lt;port2&gt;:&lt;ip1&gt;:&lt;port1&gt; &lt;username&gt;@&lt;ip&gt;</span><br></pre></td></tr></table></figure>
@@ -1181,6 +1182,8 @@
 <h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><h2 id="Access-server-C-on-PC-A"><a href="#Access-server-C-on-PC-A" class="headerlink" title="Access server C on PC A"></a>Access server C on PC A</h2><p>Run on PC A:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -N -f -L &lt;A.custom.port&gt;:&lt;C.local.ip&gt;:&lt;C.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt;</span><br></pre></td></tr></table></figure></p>
 <h2 id="Access-server-D-on-PC-A"><a href="#Access-server-D-on-PC-A" class="headerlink" title="Access server D on PC A"></a>Access server D on PC A</h2><p>Run on server D:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -CfnNt -R &lt;B.custom.port&gt;:localhost:&lt;D.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt;</span><br></pre></td></tr></table></figure></p>
 <p>Run on PC A:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -N -f -L &lt;A.custom.port&gt;:localhost:&lt;B.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="A直接ssh登陆到C"><a href="#A直接ssh登陆到C" class="headerlink" title="A直接ssh登陆到C"></a>A直接ssh登陆到C</h2><p>Add the following code to <code>~/.ssh/config</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Host server</span><br><span class="line">User C.username</span><br><span class="line">Port 22</span><br><span class="line">HostName &lt;C.local.ip&gt;</span><br><span class="line">ProxyCommand ssh B.username@B.public.ip nc %h %p 2&gt; /dev/null</span><br></pre></td></tr></table></figure></p>
+<p>Then, we can connect to server C directly.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh server</span><br></pre></td></tr></table></figure></p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="http://blog.creke.net/722.html" target="_blank" rel="noopener">梦溪博客</a></p>
 
           
