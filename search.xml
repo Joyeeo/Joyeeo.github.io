@@ -13,7 +13,7 @@
   <entry>
     <title><![CDATA[git-command]]></title>
     <url>%2F2018%2F09%2F29%2Fgit-command%2F</url>
-    <content type="text"><![CDATA[Git commandupdate a forked repo from remote repo.123456789git remote add upstream git@github.com:&lt;custom&gt;.gitgit remote -vgit fetch upstreamgit merge upstream/mastergit push git 合并多个commits合并多个 Commit git拉取远程分支到本地查看远程分支1git branch -r 拉取远程分支到本地分支1git checkout -b 本地分支名x origin/远程分支名x]]></content>
+    <content type="text"><![CDATA[Git commandupdate a forked repo from remote repo.123456789git remote add upstream git@github.com:&lt;custom&gt;.gitgit remote -vgit fetch upstreamgit merge upstream/mastergit push git 合并多个commits合并多个 Commit git拉取远程分支到本地查看远程分支1git branch -r 拉取远程分支到本地分支1git checkout -b 本地分支名x origin/远程分支名x 取消本地修改1234git checkout . #本地所有修改的。没有的提交的，都返回到原来的状态git stash #把所有没有提交的修改暂存到stash里面。可用git stash pop回复。git reset --hard HASH #返回到某个节点，不保留修改。git reset --soft HASH #返回到某个节点。保留修改]]></content>
       <tags>
         <tag>git</tag>
       </tags>
@@ -39,7 +39,7 @@
   <entry>
     <title><![CDATA[PyTorch Begin]]></title>
     <url>%2F2018%2F08%2F10%2FPyTorch-Begin%2F</url>
-    <content type="text"></content>
+    <content type="text"><![CDATA[Recommand approach for saving modelStack overflow First 12345# savetorch.save(model.state_dict(), PATH)# loadmodel = Model(args)model.load_state_dict(torch.load(PATH)) Second 1234# savetorch.save(mode, PATH)# loadmodel = torch.load(PATH)]]></content>
       <tags>
         <tag>PyTorch</tag>
       </tags>

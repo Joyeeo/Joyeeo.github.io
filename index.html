@@ -506,6 +506,7 @@
 <h2 id="git-合并多个commits"><a href="#git-合并多个commits" class="headerlink" title="git 合并多个commits"></a>git 合并多个commits</h2><p><a href="https://www.jianshu.com/p/964de879904a" target="_blank" rel="noopener">合并多个 Commit</a></p>
 <h2 id="git拉取远程分支到本地"><a href="#git拉取远程分支到本地" class="headerlink" title="git拉取远程分支到本地"></a>git拉取远程分支到本地</h2><h3 id="查看远程分支"><a href="#查看远程分支" class="headerlink" title="查看远程分支"></a>查看远程分支</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -r</span><br></pre></td></tr></table></figure>
 <h3 id="拉取远程分支到本地分支"><a href="#拉取远程分支到本地分支" class="headerlink" title="拉取远程分支到本地分支"></a>拉取远程分支到本地分支</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b 本地分支名x origin/远程分支名x</span><br></pre></td></tr></table></figure>
+<h3 id="取消本地修改"><a href="#取消本地修改" class="headerlink" title="取消本地修改"></a>取消本地修改</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git checkout . <span class="comment">#本地所有修改的。没有的提交的，都返回到原来的状态</span></span><br><span class="line">git stash  <span class="comment">#把所有没有提交的修改暂存到stash里面。可用git stash pop回复。</span></span><br><span class="line">git reset --hard HASH <span class="comment">#返回到某个节点，不保留修改。</span></span><br><span class="line">git reset --soft HASH <span class="comment">#返回到某个节点。保留修改</span></span><br></pre></td></tr></table></figure>
           
         
       
@@ -904,7 +905,16 @@
       
         
           
-            
+            <h2 id="Recommand-approach-for-saving-model"><a href="#Recommand-approach-for-saving-model" class="headerlink" title="Recommand approach for saving model"></a>Recommand approach for saving model</h2><p><a href="https://stackoverflow.com/questions/42703500/best-way-to-save-a-trained-model-in-pytorch" target="_blank" rel="noopener">Stack overflow</a></p>
+<ul>
+<li><p>First</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># save</span></span><br><span class="line">torch.save(model.state_dict(), PATH)</span><br><span class="line"><span class="comment"># load</span></span><br><span class="line">model = Model(args)</span><br><span class="line">model.load_state_dict(torch.load(PATH))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Second</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># save</span></span><br><span class="line">torch.save(mode, PATH)</span><br><span class="line"><span class="comment"># load</span></span><br><span class="line">model = torch.load(PATH)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
           
         
       

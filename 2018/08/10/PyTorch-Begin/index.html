@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Joey&apos;s person blog">
+<meta name="description" content="Recommand approach for saving modelStack overflow  First 12345# savetorch.save(model.state_dict(), PATH)# loadmodel = Model(args)model.load_state_dict(torch.load(PATH))  Second 1234# savetorch.save(mo">
 <meta name="keywords" content="PyTorch">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PyTorch Begin">
 <meta property="og:url" content="http://joyeeo.github.io/2018/08/10/PyTorch-Begin/index.html">
 <meta property="og:site_name" content="Joey&#39;s note">
-<meta property="og:description" content="Joey&apos;s person blog">
+<meta property="og:description" content="Recommand approach for saving modelStack overflow  First 12345# savetorch.save(model.state_dict(), PATH)# loadmodel = Model(args)model.load_state_dict(torch.load(PATH))  Second 1234# savetorch.save(mo">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-11T03:12:06.000Z">
+<meta property="og:updated_time" content="2018-10-25T03:16:49.937Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PyTorch Begin">
-<meta name="twitter:description" content="Joey&apos;s person blog">
+<meta name="twitter:description" content="Recommand approach for saving modelStack overflow  First 12345# savetorch.save(model.state_dict(), PATH)# loadmodel = Model(args)model.load_state_dict(torch.load(PATH))  Second 1234# savetorch.save(mo">
 
 
 
@@ -365,7 +365,16 @@
       
 
       
-        
+        <h2 id="Recommand-approach-for-saving-model"><a href="#Recommand-approach-for-saving-model" class="headerlink" title="Recommand approach for saving model"></a>Recommand approach for saving model</h2><p><a href="https://stackoverflow.com/questions/42703500/best-way-to-save-a-trained-model-in-pytorch" target="_blank" rel="noopener">Stack overflow</a></p>
+<ul>
+<li><p>First</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># save</span></span><br><span class="line">torch.save(model.state_dict(), PATH)</span><br><span class="line"><span class="comment"># load</span></span><br><span class="line">model = Model(args)</span><br><span class="line">model.load_state_dict(torch.load(PATH))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Second</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># save</span></span><br><span class="line">torch.save(mode, PATH)</span><br><span class="line"><span class="comment"># load</span></span><br><span class="line">model = torch.load(PATH)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
       
     </div>
     
@@ -469,8 +478,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -525,6 +543,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Recommand-approach-for-saving-model"><span class="nav-number">1.</span> <span class="nav-text">Recommand approach for saving model</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
