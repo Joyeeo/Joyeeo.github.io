@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[install-tensorRT]]></title>
     <url>%2F2018%2F10%2F26%2Finstall-tensorRT%2F</url>
-    <content type="text"><![CDATA[Install Driver and CUDAinstall cuda Install TensorRTDownload TensorRT 5.0tensorrt download Then, I got the fllowing package:nv-tensorrt-repo-ubuntu1604-cuda9.0-trt5.0.0.10-rc-20180906_1-1_amd64.deb Install TensorRT 5.01234567sudo dpkg -i nv-tensorrt-repo-ubuntu1604-cuda9.0-trt5.0.0.10-rc-20180906_1-1_amd64.debsudo apt-key add /var/nv-tensorrt-repo-cuda9.0-trt5.0.0.10-rc-20180906/7fa2af80.pub sudo apt-get update# Unluckily, I encountered the following problem.## double free or corruption (fasttop): 0x0000000001368e00 ***# I solved it by run: sudo apt-get purge libappstream3 sudo apt-get install tensorrt]]></content>
+    <content type="text"><![CDATA[Install Driver and CUDAinstall cuda Install TensorRTDownload TensorRT 5.0tensorrt download Then, I got the following package:nv-tensorrt-repo-ubuntu1604-cuda9.0-trt5.0.0.10-rc-20180906_1-1_amd64.deb Install TensorRT 5.01234567sudo dpkg -i nv-tensorrt-repo-ubuntu1604-cuda9.0-trt5.0.0.10-rc-20180906_1-1_amd64.debsudo apt-key add /var/nv-tensorrt-repo-cuda9.0-trt5.0.0.10-rc-20180906/7fa2af80.pub sudo apt-get update# Unluckily, I encountered the following problem.## double free or corruption (fasttop): 0x0000000001368e00 ***# I solved it by run: sudo apt-get purge libappstream3 sudo apt-get install tensorrt]]></content>
       <tags>
         <tag>cuda</tag>
         <tag>nvidia-driver</tag>
