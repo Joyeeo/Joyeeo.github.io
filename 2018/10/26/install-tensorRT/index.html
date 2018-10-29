@@ -87,10 +87,12 @@
 <meta property="og:site_name" content="Joey&#39;s note">
 <meta property="og:description" content="Install Driver and CUDAinstall cuda Install TensorRTDownload TensorRT 5.0tensorrt download Then, I got the following package:nv-tensorrt-repo-ubuntu1604-cuda9.0-trt5.0.0.10-rc-20180906_1-1_amd64.deb I">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-10-26T14:25:19.646Z">
+<meta property="og:image" content="http://joyeeo.github.io/2018/10/26/install-tensorRT/mnist.png">
+<meta property="og:updated_time" content="2018-10-29T08:48:31.666Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="install-tensorRT">
 <meta name="twitter:description" content="Install Driver and CUDAinstall cuda Install TensorRTDownload TensorRT 5.0tensorrt download Then, I got the following package:nv-tensorrt-repo-ubuntu1604-cuda9.0-trt5.0.0.10-rc-20180906_1-1_amd64.deb I">
+<meta name="twitter:image" content="http://joyeeo.github.io/2018/10/26/install-tensorRT/mnist.png">
 
 
 
@@ -369,6 +371,9 @@
 <h1 id="Install-TensorRT"><a href="#Install-TensorRT" class="headerlink" title="Install TensorRT"></a>Install TensorRT</h1><h2 id="Download-TensorRT-5-0"><a href="#Download-TensorRT-5-0" class="headerlink" title="Download TensorRT 5.0"></a>Download TensorRT 5.0</h2><p><a href="https://developer.nvidia.com/tensorrt" target="_blank" rel="noopener">tensorrt download</a></p>
 <p>Then, I got the following package:<br><code>nv-tensorrt-repo-ubuntu1604-cuda9.0-trt5.0.0.10-rc-20180906_1-1_amd64.deb</code></p>
 <h2 id="Install-TensorRT-5-0"><a href="#Install-TensorRT-5-0" class="headerlink" title="Install TensorRT 5.0"></a>Install TensorRT 5.0</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo dpkg -i nv-tensorrt-repo-ubuntu1604-cuda9.0-trt5.0.0.10-rc-20180906_1-1_amd64.deb</span><br><span class="line">sudo apt-key add /var/nv-tensorrt-repo-cuda9.0-trt5.0.0.10-rc-20180906/7fa2af80.pub  </span><br><span class="line">sudo apt-get update</span><br><span class="line"><span class="comment"># Unluckily, I encountered the following problem.</span></span><br><span class="line"><span class="comment">## double free or corruption (fasttop): 0x0000000001368e00 ***</span></span><br><span class="line"><span class="comment"># I solved it by run: sudo apt-get purge libappstream3 </span></span><br><span class="line">sudo apt-get install tensorrt</span><br></pre></td></tr></table></figure>
+<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/src/tensorrt/samples</span><br><span class="line">sudo make -j32</span><br><span class="line"><span class="built_in">cd</span> ../bin</span><br><span class="line">./samples_mnist</span><br></pre></td></tr></table></figure>
+<p><img src="mnist.png" alt="mnist"></p>
+
       
     </div>
     
@@ -549,7 +554,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-Driver-and-CUDA"><span class="nav-number">1.</span> <span class="nav-text">Install Driver and CUDA</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-TensorRT"><span class="nav-number">2.</span> <span class="nav-text">Install TensorRT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Download-TensorRT-5-0"><span class="nav-number">2.1.</span> <span class="nav-text">Download TensorRT 5.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-TensorRT-5-0"><span class="nav-number">2.2.</span> <span class="nav-text">Install TensorRT 5.0</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-Driver-and-CUDA"><span class="nav-number">1.</span> <span class="nav-text">Install Driver and CUDA</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-TensorRT"><span class="nav-number">2.</span> <span class="nav-text">Install TensorRT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Download-TensorRT-5-0"><span class="nav-number">2.1.</span> <span class="nav-text">Download TensorRT 5.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-TensorRT-5-0"><span class="nav-number">2.2.</span> <span class="nav-text">Install TensorRT 5.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Demo"><span class="nav-number">2.3.</span> <span class="nav-text">Demo</span></a></li></ol></li></ol></div>
             
 
           </div>
