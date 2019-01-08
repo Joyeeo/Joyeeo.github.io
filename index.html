@@ -287,6 +287,139 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joyeeo.github.io/2019/01/08/mxnet-build-from-source/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="hustzxd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey's note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/08/mxnet-build-from-source/" itemprop="url">mxnet-build-from-source</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-08T18:01:38+08:00">
+                2019-01-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/08/mxnet-build-from-source/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/08/mxnet-build-from-source/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Build-MXNet-from-Source"><a href="#Build-MXNet-from-Source" class="headerlink" title="Build MXNet from Source"></a>Build MXNet from Source</h1><h2 id="Clone-the-MXNet-Project"><a href="#Clone-the-MXNet-Project" class="headerlink" title="Clone the MXNet Project"></a>Clone the MXNet Project</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --recursive https://github.com/apache/incubator-mxnet mxnet</span><br><span class="line"><span class="built_in">cd</span> mxnet</span><br></pre></td></tr></table></figure>
+<h2 id="Download-mklcudnn"><a href="#Download-mklcudnn" class="headerlink" title="Download mklcudnn"></a>Download mklcudnn</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> 3rdparty/mkldnn/external</span><br><span class="line">wget https://github.com/intel/mkl-dnn/releases/download/v0.17.2/mklml_lnx_2019.0.1.20180928.tgz</span><br></pre></td></tr></table></figure>
+<h2 id="Build"><a href="#Build" class="headerlink" title="Build"></a>Build</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> docs/install </span><br><span class="line">./install_mxnet_ubuntu_python.sh</span><br></pre></td></tr></table></figure>
+<h2 id="install-python"><a href="#install-python" class="headerlink" title="install python"></a>install python</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> python</span><br><span class="line">pip install -e .</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://joyeeo.github.io/2018/12/08/MXNet-begin/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1501,165 +1634,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://joyeeo.github.io/2018/08/08/python-argparse/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="hustzxd">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Joey's note">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/08/python-argparse/" itemprop="url">python argparse</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-08T22:01:45+08:00">
-                2018-08-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/08/08/python-argparse/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/08/08/python-argparse/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser= argparse.ArgumentParser()</span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">''</span>)</span><br><span class="line">parser.add_argument(<span class="string">'data'</span>, metavar=<span class="string">'DIR'</span>, help=<span class="string">'path to dataset'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="Parameter"><a href="#Parameter" class="headerlink" title="Parameter"></a>Parameter</h2><ul>
-<li>prog - The name of the program (default: sys.argv[0])</li>
-<li>usage - The string describing the program usage (default: generated from arguments added to parser)</li>
-<li>description - Text to display before the argument help (default: none)</li>
-<li>epilog - Text to display after the argument help (default: none)</li>
-<li>parents - A list of ArgumentParser objects whose arguments should also be included</li>
-<li>formatter_class - A class for customizing the help output</li>
-<li>prefix_chars - The set of characters that prefix optional arguments (default: ‘-‘)</li>
-<li>fromfile_prefix_chars - The set of characters that prefix files from which additional arguments should be read (default: None)</li>
-<li>argument_default - The global default value for arguments (default: None)</li>
-<li>conflict_handler - The strategy for resolving conflicting optionals (usually unnecessary)</li>
-<li>add_help - Add a -h/–help option to the parser (default: True)</li>
-<li>allow_abbrev - Allows long options to be abbreviated if the abbreviation is unambiguous. (default: True)</li>
-</ul>
-<h2 id="The-add-augment-method"><a href="#The-add-augment-method" class="headerlink" title="The add_augment() method"></a>The add_augment() method</h2><ul>
-<li>name or flags - Either a name or a list of option strings, e.g. foo or -f, –foo.</li>
-<li>action - The basic type of action to be taken when this argument is encountered at the command line.</li>
-<li>nargs - The number of command-line arguments that should be consumed.</li>
-<li>const - A constant value required by some action and nargs selections.</li>
-<li>default - The value produced if the argument is absent from the command line.</li>
-<li>type - The type to which the command-line argument should be converted.</li>
-<li>choices - A container of the allowable values for the argument.</li>
-<li>required - Whether or not the command-line option may be omitted (optionals only).</li>
-<li>help - A brief description of what the argument does.</li>
-<li>metavar - A name for the argument in usage messages. 有助于提醒用户，该命令行参数所期待的参数，如 metavar=”mode”</li>
-<li>dest - The name of the attribute to be added to the object returned by parse_args().</li>
-</ul>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://blog.csdn.net/itlance_ouyang/article/details/52489674" target="_blank" rel="noopener">Python 命令行解析</a><br><a href="https://docs.python.org/3/library/argparse.html" target="_blank" rel="noopener">python.org</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1714,7 +1688,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1764,7 +1738,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
