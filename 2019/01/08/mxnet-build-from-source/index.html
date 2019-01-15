@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Joey&#39;s note">
 <meta property="og:description" content="Build MXNet from SourceClone the MXNet Project12git clone --recursive https://github.com/apache/incubator-mxnet mxnetcd mxnet Download mklcudnn12cd 3rdparty/mkldnn/externalwget https://github.com/inte">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-01-09T02:12:18.980Z">
+<meta property="og:updated_time" content="2019-01-09T02:13:20.938Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mxnet-build-from-source">
 <meta name="twitter:description" content="Build MXNet from SourceClone the MXNet Project12git clone --recursive https://github.com/apache/incubator-mxnet mxnetcd mxnet Download mklcudnn12cd 3rdparty/mkldnn/externalwget https://github.com/inte">
@@ -370,7 +370,7 @@
 <h2 id="Build"><a href="#Build" class="headerlink" title="Build"></a>Build</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> docs/install </span><br><span class="line">./install_mxnet_ubuntu_python.sh</span><br></pre></td></tr></table></figure>
 <h2 id="install-python"><a href="#install-python" class="headerlink" title="install python"></a>install python</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> python</span><br><span class="line">pip install -e .</span><br></pre></td></tr></table></figure>
 <h2 id="Add-operator-in-backend"><a href="#Add-operator-in-backend" class="headerlink" title="Add operator in backend"></a>Add operator in backend</h2><h3 id="Why-not-add-custom-operator-using-PythonOp-interface"><a href="#Why-not-add-custom-operator-using-PythonOp-interface" class="headerlink" title="Why not add custom operator using PythonOp interface."></a>Why not add custom operator using <code>PythonOp</code> interface.</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NDArrayOp</span><span class="params">(PythonOp)</span>:</span></span><br><span class="line">    <span class="string">"""Base class for numpy operators. numpy operators allow parts</span></span><br><span class="line"><span class="string">    of computation in symbolic graph to be writen in numpy. This feature</span></span><br><span class="line"><span class="string">    is intended for quickly hacking out a solution for non performance</span></span><br><span class="line"><span class="string">    critical parts. Please consider write a c++ implementation if it becomes</span></span><br><span class="line"><span class="string">    a bottleneck.</span></span><br><span class="line"><span class="string">    Note that if your operator contains internal states (like arrays),</span></span><br><span class="line"><span class="string">    it cannot be used for multi-gpu training.</span></span><br><span class="line"><span class="string">    """</span></span><br></pre></td></tr></table></figure>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a href="https://mxnet.incubator.apache.org/install/ubuntu_setup.html#install-mxnet-for-python" target="_blank" rel="noopener">nstall-mxnet-for-python</a><br><a href="https://mxnet.incubator.apache.org/faq/add_op_in_backend.html" target="_blank" rel="noopener">add op in backend</a></p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a href="https://mxnet.incubator.apache.org/install/ubuntu_setup.html#install-mxnet-for-python" target="_blank" rel="noopener">install-mxnet-for-python</a><br><a href="https://mxnet.incubator.apache.org/faq/add_op_in_backend.html" target="_blank" rel="noopener">add op in backend</a></p>
 
       
     </div>
@@ -403,8 +403,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/12/08/MXNet-begin/" rel="next" title="MXNet-begin">
-                <i class="fa fa-chevron-left"></i> MXNet-begin
+              <a href="/2018/10/26/install-tensorRT/" rel="next" title="install-tensorRT">
+                <i class="fa fa-chevron-left"></i> install-tensorRT
               </a>
             
           </div>
@@ -412,6 +412,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/11/paper-of-quantization/" rel="prev" title="paper-of-quantization">
+                paper-of-quantization <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -502,7 +506,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -515,7 +519,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
