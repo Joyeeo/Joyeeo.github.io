@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="quantization,CNN,compression," />
 
 
 
@@ -79,17 +79,26 @@
 
 
 
-<meta name="description" content="Joey&apos;s person blog">
-<meta name="keywords" content="AI DL NLP">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Joey&#39;s note">
-<meta property="og:url" content="http://joyeeo.github.io/tags/anaconda-python/index.html">
+<meta name="description" content="Quantization AlgorithmsTruncation without re-training原理与分析将fp32的数，直接截断为8bit定点数以8bits为例，每层的权重共享一个QCode，每层的activation共享一个QCode。$$    x_q = \frac{clip(round(x_f\times 2^{qcode}), -2^7, 2^7-1)}{2^{qcode}}">
+<meta name="keywords" content="quantization,CNN,compression">
+<meta property="og:type" content="article">
+<meta property="og:title" content="suvery-of-qcnn">
+<meta property="og:url" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/index.html">
 <meta property="og:site_name" content="Joey&#39;s note">
-<meta property="og:description" content="Joey&apos;s person blog">
+<meta property="og:description" content="Quantization AlgorithmsTruncation without re-training原理与分析将fp32的数，直接截断为8bit定点数以8bits为例，每层的权重共享一个QCode，每层的activation共享一个QCode。$$    x_q = \frac{clip(round(x_f\times 2^{qcode}), -2^7, 2^7-1)}{2^{qcode}}">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/qcode.svg">
+<meta property="og:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/WRPN_result.png">
+<meta property="og:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/WAGE_result.png">
+<meta property="og:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/clipq_result.png">
+<meta property="og:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/bi_real_result.png">
+<meta property="og:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/non_uniform.png">
+<meta property="og:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/pact_result.png">
+<meta property="og:updated_time" content="2019-01-16T11:55:13.988Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Joey&#39;s note">
-<meta name="twitter:description" content="Joey&apos;s person blog">
+<meta name="twitter:title" content="suvery-of-qcnn">
+<meta name="twitter:description" content="Quantization AlgorithmsTruncation without re-training原理与分析将fp32的数，直接截断为8bit定点数以8bits为例，每层的权重共享一个QCode，每层的activation共享一个QCode。$$    x_q = \frac{clip(round(x_f\times 2^{qcode}), -2^7, 2^7-1)}{2^{qcode}}">
+<meta name="twitter:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/qcode.svg">
 
 
 
@@ -119,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="http://joyeeo.github.io/tags/anaconda-python/"/>
+  <link rel="canonical" href="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/"/>
 
 
 
 
 
-  <title>Tag: anaconda python | Joey's note</title>
+  <title>suvery-of-qcnn | Joey's note</title>
   
 
 
@@ -144,7 +153,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -272,54 +281,222 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>anaconda python<small>Tag</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="hustzxd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey's note">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/09/28/anaconda-config/" itemprop="url">
-              
-                <span itemprop="name">anaconda-config</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">suvery-of-qcnn</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-28T21:42:09+08:00"
-              content="2018-09-28" >
-          09-28
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-16T19:55:13+08:00">
+                2019-01-16
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/16/suvery-of-qcnn/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/16/suvery-of-qcnn/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Quantization-Algorithms"><a href="#Quantization-Algorithms" class="headerlink" title="Quantization Algorithms"></a>Quantization Algorithms</h1><h2 id="Truncation-without-re-training"><a href="#Truncation-without-re-training" class="headerlink" title="Truncation without re-training"></a>Truncation without re-training</h2><h3 id="原理与分析"><a href="#原理与分析" class="headerlink" title="原理与分析"></a>原理与分析</h3><p>将fp32的数，直接截断为8bit定点数<br>以8bits为例，每层的权重共享一个QCode，每层的activation共享一个QCode。<br>$$<br>    x_q = \frac{clip(round(x_f\times 2^{qcode}), -2^7, 2^7-1)}{2^{qcode}}<br>$$<br><img src="qcode.svg" alt="qcode1"></p>
+<h4 id="如何配置QCode"><a href="#如何配置QCode" class="headerlink" title="如何配置QCode"></a>如何配置QCode</h4><ol>
+<li><p>accuracy-aware config<br>对于分类网络来说，我们只关心它最后的分类精度，比如baseline网络在ImageNet上分类精度为70%，通过改变配置config，能够得到最后量化后的网络的分类精度。配置Qcode的指标只关心最后的分类精度。</p>
+</li>
+<li><p>Greedy layer-wise optimization<br>另外，可以采用更加方便的方式，通过最小化$x_q$与$x$之间的KL散度或者MSE，来配置每层的QCode.</p>
+</li>
+</ol>
+<h3 id="特点分析"><a href="#特点分析" class="headerlink" title="特点分析"></a>特点分析</h3><ol>
+<li>运算简单，不需要重新进行训练</li>
+<li>需要逐层配置QCode参数，耗费较多资源</li>
+<li>QCode的量化编码方式过于简单，且Qcode只能取值为整数，对分类网络比较友好，但是对检测网络和其他类型的网络并不一定能轻松适配。</li>
+</ol>
+<h3 id="试验与结论"><a href="#试验与结论" class="headerlink" title="试验与结论"></a>试验与结论</h3><p>使用这种方式进行离线量化，最后的分类网络的精度基本不会下降（千分位的变动）.</p>
+<h2 id="DoReFa-Net"><a href="#DoReFa-Net" class="headerlink" title="DoReFa Net"></a>DoReFa Net</h2><h2 id="WRPN"><a href="#WRPN" class="headerlink" title="WRPN"></a>WRPN</h2><p>受到了Wide ResNet的启发，Wide ResNet减少网络的深度，扩展网络的宽度，通过重新设计了网络结构的方式来使得网络保持原有的精度。<strong>WRPN</strong> wide reduced-precision networks需要对weights和activation进行量化，相当于减少了网络的拟合能力，可以通过增加网络款宽度的方式来增加一部分参数来弥补量化带来的损失。</p>
+<p>半成品的实现：<a href="https://nervanasystems.github.io/distiller/algo_quantization/index.html" target="_blank" rel="noopener">Code</a></p>
+<h3 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h3><ol>
+<li>将值限制在[-1, 1]之间</li>
+<li>对w进行有符号量化，对a进行无符号量化<br>$$<br> w_q = \frac{1}{2^{k-1}-1}round((2^{k-1}-1)\cdot w_f) \\<br> a_q = \frac{1}{2^{k}-1}round((2^{k}-1)\cdot a_f)<br>$$</li>
+</ol>
+<h3 id="特点分析-1"><a href="#特点分析-1" class="headerlink" title="特点分析"></a>特点分析</h3><ol>
+<li>quantier的parameter是静态的，不需要像TTQ一样需要在训练中进行学习</li>
+<li><code>In our work, we maintain the depth parameter same as baseline network but widen the filter maps.</code></li>
+<li><code>To be consistent with results reported in prior works, we do not quantize weights and activations of the first and last layer.</code></li>
+</ol>
+<h3 id="试验与结论-1"><a href="#试验与结论-1" class="headerlink" title="试验与结论"></a>试验与结论</h3><p><img src="WRPN_result.png" alt="resnet"></p>
+<h2 id="VNQ-Variational-Network-Quantization"><a href="#VNQ-Variational-Network-Quantization" class="headerlink" title="VNQ: Variational Network Quantization"></a>VNQ: Variational Network Quantization</h2><p><code>Our method is an extension of Sparse VD</code> 公式很多，还需要时间推导。</p>
+<h3 id="原理分析-1"><a href="#原理分析-1" class="headerlink" title="原理分析"></a>原理分析</h3><h3 id="特点分析-2"><a href="#特点分析-2" class="headerlink" title="特点分析"></a>特点分析</h3><ol>
+<li><code>The method does not require fine-tuning after quantization.</code><br>可以从scratch开始训练，也可以直接使用预训练好的权重。</li>
+<li><code>Results are shown for ternary quantization on LeNet-5 (MNIST) and DenseNet (CIFAR-10).</code><br>只有小数据集小网络，小数据集大网络，没有大数据集和大网络，可能不具有普适性。</li>
+</ol>
+<h2 id="WAGE-Training-and-Inference-with-Integers-in-Deep-Neural-Networks"><a href="#WAGE-Training-and-Inference-with-Integers-in-Deep-Neural-Networks" class="headerlink" title="WAGE: Training and Inference with Integers in Deep Neural Networks"></a>WAGE: Training and Inference with Integers in Deep Neural Networks</h2><p>官方源码：<a href="https://github.com/boluoweifenda/WAGE" target="_blank" rel="noopener">code</a>,只包含cifar10的demo。<br>将Weight,Activation,Gradient,Error都进行量化，量化方式采用<br>$$<br>    \sigma(k) = 2^{k-1}, k\in \mathbb{N_+} \\<br>    Q(x, k) = clip(\sigma(k)\cdot round(\frac{x}{\sigma(k)}), -1+\sigma(k), 1-\sigma(k))<br>$$</p>
+<h3 id="试验与结论-2"><a href="#试验与结论-2" class="headerlink" title="试验与结论"></a>试验与结论</h3><p><img src="WAGE_result.png" alt="result"><br>如果需要在AI芯片进行训练，WAGE是一个很好的研究方向；但是当前主流的做法是训练交给GPU，只需要在AI芯片上进行inference.</p>
+<h2 id="Clip-Q-Deep-network-compression-learning-by-In-Parallel-Pruning-Quantization"><a href="#Clip-Q-Deep-network-compression-learning-by-In-Parallel-Pruning-Quantization" class="headerlink" title="Clip-Q: Deep network compression learning by In-Parallel Pruning Quantization"></a>Clip-Q: Deep network compression learning by In-Parallel Pruning Quantization</h2><ol>
+<li><code>We combine network pruning and weight quantization in a single learning framework</code></li>
+<li>使用贝叶斯优化器来<code>the pruning rate p and the bit budget b</code></li>
+<li>只对weights进行了pruning和quantization. pruning是百分比的方式，quantization是聚类codebook的方式</li>
+</ol>
+<h3 id="试验与结论-3"><a href="#试验与结论-3" class="headerlink" title="试验与结论"></a>试验与结论</h3><p><img src="clipq_result.png" alt="clipq_result.png"><br>量化相关试验我认为还是比较相同bitwidth下的精度更切合实际应用，毕竟量化的作用一方面是压缩权重，更重要的还是AI芯片的inference加速，需要给出hardware friendly的分析与验证。</p>
+<h2 id="Bi-Real-Net"><a href="#Bi-Real-Net" class="headerlink" title="Bi-Real Net"></a>Bi-Real Net</h2><ol>
+<li>较XOR-Net, BNN网络的分类accuracy有较大的提升</li>
+<li>没有量化第一层和最后一层</li>
+</ol>
+<h3 id="试验与结论-4"><a href="#试验与结论-4" class="headerlink" title="试验与结论"></a>试验与结论</h3><p><img src="bi_real_result.png" alt="bi_real_result.png"></p>
+<h2 id="Efficient-Non-uniform-quantizer-for-quantized-neural-network-targeting-Re-configurable-hardware"><a href="#Efficient-Non-uniform-quantizer-for-quantized-neural-network-targeting-Re-configurable-hardware" class="headerlink" title="Efficient Non-uniform quantizer for quantized neural network targeting Re-configurable hardware"></a>Efficient Non-uniform quantizer for quantized neural network targeting Re-configurable hardware</h2><p><img src="non_uniform.png" alt="non_uniform.png"></p>
+<h2 id="ELQ-Explicit-Loss-Error-Aware-Quantization-for-Low-Bit-Deep-Neural-Networks"><a href="#ELQ-Explicit-Loss-Error-Aware-Quantization-for-Low-Bit-Deep-Neural-Networks" class="headerlink" title="ELQ: Explicit Loss-Error-Aware Quantization for Low-Bit Deep Neural Networks"></a>ELQ: Explicit Loss-Error-Aware Quantization for Low-Bit Deep Neural Networks</h2><ol>
+<li>之前的方式大多是layer-wise 最小化量化前后数值的    Error，本文建立了quantization与loss之间的关系。<br>其实在pruning中也有类似的改进，一般大家的认为weights越小越不重要，优先prune掉，后来提出fisher pruning就是根据loss来确定pruning的策略。前者简单直接，后者理论上能找到更优的解，但实现麻烦。</li>
+<li>只量化了weights</li>
+</ol>
+<h2 id="PACT-parameterized-clipping-activation-for-quantized-neural-networks"><a href="#PACT-parameterized-clipping-activation-for-quantized-neural-networks" class="headerlink" title="PACT: parameterized clipping activation for quantized neural networks"></a>PACT: parameterized clipping activation for quantized neural networks</h2><ol>
+<li>PACT提出Activation的量化方法，并使用DoReFa量化weight，最终训练w4a4    网络在ImageNet上仍能达到很好的accuracy，编码方式也十分简单，很值得借鉴。</li>
+<li>仍然没有量化第一层和最后一层</li>
+</ol>
+<h3 id="原理分析-2"><a href="#原理分析-2" class="headerlink" title="原理分析"></a>原理分析</h3><ol>
+<li>Forward quantization<br>$$<br> y = PACT(x) = 0.5(|x|-|x-\alpha|+\alpha) \\<br> y = round(y\cdot \frac{2^k-1}{\alpha})\cdot \frac{\alpha}{2^k-1}<br>$$</li>
+<li>Backward, STE:<br>$$<br> \cfrac{\partial y_q}{\partial\alpha} = \cfrac{\partial y_q}{\partial y}\cfrac{\partial y}{\partial\alpha}\simeq \cfrac{\partial y}{\partial \alpha}<br>$$</li>
+</ol>
+<h3 id="试验与结论-5"><a href="#试验与结论-5" class="headerlink" title="试验与结论"></a>试验与结论</h3><p><img src="pact_result.png" alt="pact_result.png"><br>weights使用DoReFa方式量化，activations使用PACT方式量化，可以看到在ResNet18上w4a4只和baseline低了一个点。</p>
+<h1 id="References"><a href="#References" class="headerlink" title="References:"></a>References:</h1><ol>
+<li><a href="https://joyeeo.github.io/2019/01/11/paper-of-quantization/">paper-of-quantization</a></li>
+<li><a href="https://nervanasystems.github.io/distiller/algo_quantization/index.html" target="_blank" rel="noopener">nervanasystems.github.io</a></li>
+</ol>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/quantization/" rel="tag"># quantization</a>
+          
+            <a href="/tags/CNN/" rel="tag"># CNN</a>
+          
+            <a href="/tags/compression/" rel="tag"># compression</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/11/paper-of-quantization/" rel="next" title="paper-of-quantization">
+                <i class="fa fa-chevron-left"></i> paper-of-quantization
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -327,6 +504,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -347,8 +538,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -403,6 +603,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Quantization-Algorithms"><span class="nav-number">1.</span> <span class="nav-text">Quantization Algorithms</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Truncation-without-re-training"><span class="nav-number">1.1.</span> <span class="nav-text">Truncation without re-training</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理与分析"><span class="nav-number">1.1.1.</span> <span class="nav-text">原理与分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何配置QCode"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">如何配置QCode</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特点分析"><span class="nav-number">1.1.2.</span> <span class="nav-text">特点分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论"><span class="nav-number">1.1.3.</span> <span class="nav-text">试验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DoReFa-Net"><span class="nav-number">1.2.</span> <span class="nav-text">DoReFa Net</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WRPN"><span class="nav-number">1.3.</span> <span class="nav-text">WRPN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理分析"><span class="nav-number">1.3.1.</span> <span class="nav-text">原理分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特点分析-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">特点分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论-1"><span class="nav-number">1.3.3.</span> <span class="nav-text">试验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VNQ-Variational-Network-Quantization"><span class="nav-number">1.4.</span> <span class="nav-text">VNQ: Variational Network Quantization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理分析-1"><span class="nav-number">1.4.1.</span> <span class="nav-text">原理分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特点分析-2"><span class="nav-number">1.4.2.</span> <span class="nav-text">特点分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WAGE-Training-and-Inference-with-Integers-in-Deep-Neural-Networks"><span class="nav-number">1.5.</span> <span class="nav-text">WAGE: Training and Inference with Integers in Deep Neural Networks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论-2"><span class="nav-number">1.5.1.</span> <span class="nav-text">试验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Clip-Q-Deep-network-compression-learning-by-In-Parallel-Pruning-Quantization"><span class="nav-number">1.6.</span> <span class="nav-text">Clip-Q: Deep network compression learning by In-Parallel Pruning Quantization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论-3"><span class="nav-number">1.6.1.</span> <span class="nav-text">试验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bi-Real-Net"><span class="nav-number">1.7.</span> <span class="nav-text">Bi-Real Net</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论-4"><span class="nav-number">1.7.1.</span> <span class="nav-text">试验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Efficient-Non-uniform-quantizer-for-quantized-neural-network-targeting-Re-configurable-hardware"><span class="nav-number">1.8.</span> <span class="nav-text">Efficient Non-uniform quantizer for quantized neural network targeting Re-configurable hardware</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ELQ-Explicit-Loss-Error-Aware-Quantization-for-Low-Bit-Deep-Neural-Networks"><span class="nav-number">1.9.</span> <span class="nav-text">ELQ: Explicit Loss-Error-Aware Quantization for Low-Bit Deep Neural Networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PACT-parameterized-clipping-activation-for-quantized-neural-networks"><span class="nav-number">1.10.</span> <span class="nav-text">PACT: parameterized clipping activation for quantized neural networks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理分析-2"><span class="nav-number">1.10.1.</span> <span class="nav-text">原理分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论-5"><span class="nav-number">1.10.2.</span> <span class="nav-text">试验与结论</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">2.</span> <span class="nav-text">References:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -543,6 +759,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -560,6 +780,18 @@
       <script id="dsq-count-scr" src="https://joyee.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/';
+          this.page.identifier = '2019/01/16/suvery-of-qcnn/';
+          this.page.title = 'suvery-of-qcnn';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://joyee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
