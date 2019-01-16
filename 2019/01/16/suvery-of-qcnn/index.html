@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/bi_real_result.png">
 <meta property="og:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/non_uniform.png">
 <meta property="og:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/pact_result.png">
-<meta property="og:updated_time" content="2019-01-16T11:55:13.988Z">
+<meta property="og:updated_time" content="2019-01-16T12:15:15.611Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="suvery-of-qcnn">
 <meta name="twitter:description" content="Quantization AlgorithmsTruncation without re-training原理与分析将fp32的数，直接截断为8bit定点数以8bits为例，每层的权重共享一个QCode，每层的activation共享一个QCode。$$    x_q = \frac{clip(round(x_f\times 2^{qcode}), -2^7, 2^7-1)}{2^{qcode}}">
@@ -169,7 +169,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">不是每个人都能都能航行于海洋，但我们仍可以分享梦想</p>
+        <p class="site-subtitle">不是每个人都能航行于海洋，但我们仍可以分享梦想</p>
       
   </div>
 
@@ -413,7 +413,7 @@
 <h3 id="试验与结论-3"><a href="#试验与结论-3" class="headerlink" title="试验与结论"></a>试验与结论</h3><p><img src="clipq_result.png" alt="clipq_result.png"><br>量化相关试验我认为还是比较相同bitwidth下的精度更切合实际应用，毕竟量化的作用一方面是压缩权重，更重要的还是AI芯片的inference加速，需要给出hardware friendly的分析与验证。</p>
 <h2 id="Bi-Real-Net"><a href="#Bi-Real-Net" class="headerlink" title="Bi-Real Net"></a>Bi-Real Net</h2><ol>
 <li>较XOR-Net, BNN网络的分类accuracy有较大的提升</li>
-<li>没有量化第一层和最后一层</li>
+<li>没有量化第一层和最后一层，并不<code>Real</code>:)</li>
 </ol>
 <h3 id="试验与结论-4"><a href="#试验与结论-4" class="headerlink" title="试验与结论"></a>试验与结论</h3><p><img src="bi_real_result.png" alt="bi_real_result.png"></p>
 <h2 id="Efficient-Non-uniform-quantizer-for-quantized-neural-network-targeting-Re-configurable-hardware"><a href="#Efficient-Non-uniform-quantizer-for-quantized-neural-network-targeting-Re-configurable-hardware" class="headerlink" title="Efficient Non-uniform quantizer for quantized neural network targeting Re-configurable hardware"></a>Efficient Non-uniform quantizer for quantized neural network targeting Re-configurable hardware</h2><p><img src="non_uniform.png" alt="non_uniform.png"></p>
