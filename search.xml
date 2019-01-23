@@ -1,235 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-    
-    <entry>
-      <title>suvery-of-qcnn</title>
-      <link href="/2019/01/16/suvery-of-qcnn/"/>
-      <url>/2019/01/16/suvery-of-qcnn/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Quantization-Algorithms"><a href="#Quantization-Algorithms" class="headerlink" title="Quantization Algorithms"></a>Quantization Algorithms</h1><h2 id="Truncation-without-re-training"><a href="#Truncation-without-re-training" class="headerlink" title="Truncation without re-training"></a>Truncation without re-training</h2><h3 id="原理与分析"><a href="#原理与分析" class="headerlink" title="原理与分析"></a>原理与分析</h3><p>将fp32的数，直接截断为8bit定点数<br>以8bits为例，每层的权重共享一个QCode，每层的activation共享一个QCode。<br>$$<br>    x_q = \frac{clip(round(x_f\times 2^{qcode}), -2^7, 2^7-1)}{2^{qcode}}<br>$$<br><img src="qcode.svg" alt="qcode1"></p><h4 id="如何配置QCode"><a href="#如何配置QCode" class="headerlink" title="如何配置QCode"></a>如何配置QCode</h4><ol><li><p>accuracy-aware config<br>对于分类网络来说，我们只关心它最后的分类精度，比如baseline网络在ImageNet上分类精度为70%，通过改变配置config，能够得到最后量化后的网络的分类精度。配置Qcode的指标只关心最后的分类精度。</p></li><li><p>Greedy layer-wise optimization<br>另外，可以采用更加方便的方式，通过最小化$x_q$与$x$之间的KL散度或者MSE，来配置每层的QCode.</p></li></ol><h3 id="特点分析"><a href="#特点分析" class="headerlink" title="特点分析"></a>特点分析</h3><ol><li>运算简单，不需要重新进行训练</li><li>需要逐层配置QCode参数，耗费较多资源</li><li>QCode的量化编码方式过于简单，且Qcode只能取值为整数，对分类网络比较友好，但是对检测网络和其他类型的网络并不一定能轻松适配。</li></ol><h3 id="试验与结论"><a href="#试验与结论" class="headerlink" title="试验与结论"></a>试验与结论</h3><p>使用这种方式进行离线量化，最后的分类网络的精度基本不会下降（千分位的变动）.</p><h2 id="DoReFa-Net"><a href="#DoReFa-Net" class="headerlink" title="DoReFa Net"></a>DoReFa Net</h2><h2 id="WRPN"><a href="#WRPN" class="headerlink" title="WRPN"></a>WRPN</h2><p>受到了Wide ResNet的启发，Wide ResNet减少网络的深度，扩展网络的宽度，通过重新设计了网络结构的方式来使得网络保持原有的精度。<strong>WRPN</strong> wide reduced-precision networks需要对weights和activation进行量化，相当于减少了网络的拟合能力，可以通过增加网络款宽度的方式来增加一部分参数来弥补量化带来的损失。</p><p>半成品的实现：<a href="https://nervanasystems.github.io/distiller/algo_quantization/index.html" target="_blank" rel="noopener">Code</a></p><h3 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h3><ol><li>将值限制在[-1, 1]之间</li><li>对w进行有符号量化，对a进行无符号量化<br>$$<br> w_q = \frac{1}{2^{k-1}-1}round((2^{k-1}-1)\cdot w_f) \\<br> a_q = \frac{1}{2^{k}-1}round((2^{k}-1)\cdot a_f)<br>$$</li></ol><h3 id="特点分析-1"><a href="#特点分析-1" class="headerlink" title="特点分析"></a>特点分析</h3><ol><li>quantier的parameter是静态的，不需要像TTQ一样需要在训练中进行学习</li><li><code>In our work, we maintain the depth parameter same as baseline network but widen the filter maps.</code></li><li><code>To be consistent with results reported in prior works, we do not quantize weights and activations of the first and last layer.</code></li></ol><h3 id="试验与结论-1"><a href="#试验与结论-1" class="headerlink" title="试验与结论"></a>试验与结论</h3><p><img src="WRPN_result.png" alt="resnet"></p><h2 id="VNQ-Variational-Network-Quantization"><a href="#VNQ-Variational-Network-Quantization" class="headerlink" title="VNQ: Variational Network Quantization"></a>VNQ: Variational Network Quantization</h2><p><code>Our method is an extension of Sparse VD</code> 公式很多，还需要时间推导。</p><h3 id="原理分析-1"><a href="#原理分析-1" class="headerlink" title="原理分析"></a>原理分析</h3><h3 id="特点分析-2"><a href="#特点分析-2" class="headerlink" title="特点分析"></a>特点分析</h3><ol><li><code>The method does not require fine-tuning after quantization.</code><br>可以从scratch开始训练，也可以直接使用预训练好的权重。</li><li><code>Results are shown for ternary quantization on LeNet-5 (MNIST) and DenseNet (CIFAR-10).</code><br>只有小数据集小网络，小数据集大网络，没有大数据集和大网络，可能不具有普适性。</li></ol><h2 id="WAGE-Training-and-Inference-with-Integers-in-Deep-Neural-Networks"><a href="#WAGE-Training-and-Inference-with-Integers-in-Deep-Neural-Networks" class="headerlink" title="WAGE: Training and Inference with Integers in Deep Neural Networks"></a>WAGE: Training and Inference with Integers in Deep Neural Networks</h2><p>官方源码：<a href="https://github.com/boluoweifenda/WAGE" target="_blank" rel="noopener">code</a>,只包含cifar10的demo。<br>将Weight,Activation,Gradient,Error都进行量化，量化方式采用<br>$$<br>    \sigma(k) = 2^{k-1}, k\in \mathbb{N_+} \\<br>    Q(x, k) = clip(\sigma(k)\cdot round(\frac{x}{\sigma(k)}), -1+\sigma(k), 1-\sigma(k))<br>$$</p><h3 id="试验与结论-2"><a href="#试验与结论-2" class="headerlink" title="试验与结论"></a>试验与结论</h3><p><img src="WAGE_result.png" alt="result"><br>如果需要在AI芯片进行训练，WAGE是一个很好的研究方向；但是当前主流的做法是训练交给GPU，只需要在AI芯片上进行inference.</p><h2 id="Clip-Q-Deep-network-compression-learning-by-In-Parallel-Pruning-Quantization"><a href="#Clip-Q-Deep-network-compression-learning-by-In-Parallel-Pruning-Quantization" class="headerlink" title="Clip-Q: Deep network compression learning by In-Parallel Pruning Quantization"></a>Clip-Q: Deep network compression learning by In-Parallel Pruning Quantization</h2><ol><li><code>We combine network pruning and weight quantization in a single learning framework</code></li><li>使用贝叶斯优化器来<code>the pruning rate p and the bit budget b</code></li><li>只对weights进行了pruning和quantization. pruning是百分比的方式，quantization是聚类codebook的方式</li></ol><h3 id="试验与结论-3"><a href="#试验与结论-3" class="headerlink" title="试验与结论"></a>试验与结论</h3><p><img src="clipq_result.png" alt="clipq_result.png"><br>量化相关试验我认为还是比较相同bitwidth下的精度更切合实际应用，毕竟量化的作用一方面是压缩权重，更重要的还是AI芯片的inference加速，需要给出hardware friendly的分析与验证。</p><h2 id="Bi-Real-Net"><a href="#Bi-Real-Net" class="headerlink" title="Bi-Real Net"></a>Bi-Real Net</h2><ol><li>较XOR-Net, BNN网络的分类accuracy有较大的提升</li><li>没有量化第一层和最后一层，并不<code>Real</code>:)</li></ol><h3 id="试验与结论-4"><a href="#试验与结论-4" class="headerlink" title="试验与结论"></a>试验与结论</h3><p><img src="bi_real_result.png" alt="bi_real_result.png"></p><h2 id="Efficient-Non-uniform-quantizer-for-quantized-neural-network-targeting-Re-configurable-hardware"><a href="#Efficient-Non-uniform-quantizer-for-quantized-neural-network-targeting-Re-configurable-hardware" class="headerlink" title="Efficient Non-uniform quantizer for quantized neural network targeting Re-configurable hardware"></a>Efficient Non-uniform quantizer for quantized neural network targeting Re-configurable hardware</h2><p><img src="non_uniform.png" alt="non_uniform.png"></p><h2 id="ELQ-Explicit-Loss-Error-Aware-Quantization-for-Low-Bit-Deep-Neural-Networks"><a href="#ELQ-Explicit-Loss-Error-Aware-Quantization-for-Low-Bit-Deep-Neural-Networks" class="headerlink" title="ELQ: Explicit Loss-Error-Aware Quantization for Low-Bit Deep Neural Networks"></a>ELQ: Explicit Loss-Error-Aware Quantization for Low-Bit Deep Neural Networks</h2><ol><li>之前的方式大多是layer-wise 最小化量化前后数值的    Error，本文建立了quantization与loss之间的关系。<br>其实在pruning中也有类似的改进，一般大家的认为weights越小越不重要，优先prune掉，后来提出fisher pruning就是根据loss来确定pruning的策略。前者简单直接，后者理论上能找到更优的解，但实现麻烦。</li><li>只量化了weights</li></ol><h2 id="PACT-parameterized-clipping-activation-for-quantized-neural-networks"><a href="#PACT-parameterized-clipping-activation-for-quantized-neural-networks" class="headerlink" title="PACT: parameterized clipping activation for quantized neural networks"></a>PACT: parameterized clipping activation for quantized neural networks</h2><ol><li>PACT提出Activation的量化方法，并使用DoReFa量化weight，最终训练w4a4    网络在ImageNet上仍能达到很好的accuracy，编码方式也十分简单，很值得借鉴。</li><li>仍然没有量化第一层和最后一层</li></ol><h3 id="原理分析-2"><a href="#原理分析-2" class="headerlink" title="原理分析"></a>原理分析</h3><ol><li>Forward quantization<br>$$<br> y = PACT(x) = 0.5(|x|-|x-\alpha|+\alpha) \\<br> y = round(y\cdot \frac{2^k-1}{\alpha})\cdot \frac{\alpha}{2^k-1}<br>$$</li><li>Backward, STE:<br>$$<br> \cfrac{\partial y_q}{\partial\alpha} = \cfrac{\partial y_q}{\partial y}\cfrac{\partial y}{\partial\alpha}\simeq \cfrac{\partial y}{\partial \alpha}<br>$$</li></ol><h3 id="试验与结论-5"><a href="#试验与结论-5" class="headerlink" title="试验与结论"></a>试验与结论</h3><p><img src="pact_result.png" alt="pact_result.png"><br>weights使用DoReFa方式量化，activations使用PACT方式量化，可以看到在ResNet18上w4a4只和baseline低了一个点。</p><h1 id="References"><a href="#References" class="headerlink" title="References:"></a>References:</h1><ol><li><a href="https://joyeeo.github.io/2019/01/11/paper-of-quantization/">paper-of-quantization</a></li><li><a href="https://nervanasystems.github.io/distiller/algo_quantization/index.html" target="_blank" rel="noopener">nervanasystems.github.io</a></li></ol>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> quantization </tag>
-            
-            <tag> CNN </tag>
-            
-            <tag> compression </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>paper-of-quantization</title>
-      <link href="/2019/01/11/paper-of-quantization/"/>
-      <url>/2019/01/11/paper-of-quantization/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Related-papers"><a href="#Related-papers" class="headerlink" title="Related papers"></a>Related papers</h1><ol><li>Deep learning with limited numerical precision. <strong>2015 IBM</strong></li><li><strong>DoReFa-Net</strong>: Training low bit-width convolutional neural networks with low bit-width gradients. <strong>2016</strong></li><li><strong>XNOR-Net</strong>: ImageNet Classification using binary convolutional neural networks. <strong>2016 washington</strong></li><li><strong>BC</strong>: Binary connect.</li><li><strong>BNN</strong>: Binarized Neural Networks. <strong>NIPS2016</strong></li><li>Fixed point quantization of deep convolutional networks. <strong>2016</strong></li><li>Hardware-oriented approximation of convolutional neural networks. <strong>ICLR2016</strong></li><li><strong>TWNs</strong>: Ternary weight networks. <strong>NIPS2016</strong> ucas</li><li>Quantized convolutional neural networks for mobile devices. <strong>CVPR2016</strong> nlpr</li><li><strong>Flexpoint</strong>: an adaptive numerical format for efficient training of deep neural networks. <strong>2017</strong> intel</li><li><strong>INQ</strong>: Incremental network quantization, towards lossless CNNs with low-precision weights. <strong>ICLR2017</strong> intel labs china</li><li><strong>TTQ</strong>: Trained ternary quantization. <strong>ICLR2017</strong> stanford</li><li><strong>WRPN</strong>: wide reduced-precision networks. <strong>2017</strong> <a href="">detailed</a></li><li>A Survey of Model Compression and Acceleration for Deep Neural Networks. <strong>201712</strong></li><li><strong>VNQ</strong>: Variational network quantization. <strong>ICLR2018</strong></li><li><strong>WAGE</strong>: Training and Inference with Integers in Deep Neural Networks. <strong>ICLR2018</strong> oral tsinghua</li><li><strong>Clip-Q</strong>: Deep network compression learning by In-Parallel Pruning Quantization. <strong>CVPR2018</strong> SFU</li><li><strong>LQ-NETs</strong>: learned quantization for highly accurate and compact deep neural networks. <strong>ECCV2018</strong> Microsoft</li><li><strong>Bi-Real Net</strong>: Enhancing the performance of 1-bit CNNs with improved Representational capability and advanced training algorithm. <strong>ECCV2018</strong> HKU</li><li><strong>Synergy</strong>: Algorithm-hardware co-design for convnet accelerators on embedded FPGAs. <strong>2018</strong> UC Berkeley</li><li>Alternating multi-bit quantization for recurrent neural networks. <strong>ICLR2018</strong> alibaba</li><li>Efficient Non-uniform quantizer for quantized neural network targeting Re-configurable hardware. <strong>2018</strong></li><li><strong>ELQ</strong>: Explicit loss-error-aware quantization for low-bit deep neural networks. <strong>CVPR2018</strong> intel tsinghua</li><li>From Hashing to CNNs: training Binary weights vis hashing. <strong>AAAI2018</strong> nlpr</li><li><strong>HAQ</strong>: Hardware-Aware automated quantization. <strong>NIPS workshop2018</strong> mit</li><li>Heterogeneous Bitwidth Binarization in Convolutional Neural Networks. <strong>NIPS2018</strong> microsoft</li><li><strong>HALP</strong>: High-Accuracy Low-Precision Training. <strong>2018</strong> stanford</li><li>Mixed Precision Training. <strong>ICLR2018</strong> baidu</li><li><strong>PACT</strong>: parameterized clipping activation for quantized neural networks. <strong>2018</strong> IBM</li><li>Model Compression via distillation and quantization. <strong>ICLR2018</strong> google</li><li>Quantization and training of neural networks for efficient integer-arithmetic-only inference. <strong>CVPR2018</strong> Google</li><li>Quantized back-propagation: training binarized neural networks with quantized gradients. <strong>ICLR2018</strong></li><li><strong>QUENN</strong>: Quantization engine for low-power neural networks. <strong>CF18 ACM</strong></li><li>Scalable methods for 8-bits training of neural networks. <strong>NIPS2018</strong> intel</li><li><strong>SYQ</strong>: learning symmetric quantization for efficient deep neural networks. <strong>CVPR2018</strong> xilinx</li><li><strong>TSQ</strong>: two-step quantization for low-bit neural networks. <strong>CVPR2018</strong></li><li><strong>V-Quant</strong>: Value-aware quantization for training and inference of neural networks. <strong>ECCV2018</strong> facebook</li><li><strong>UNIQ</strong>: Uniform noise injection for non-uniform quantization of neural networks. <strong>2018</strong></li><li>Training a binary weight object detector by knowledge transfer for autonomous driving. <strong>2018</strong></li><li>Training competitive binary neural networks from scratch. <strong>2018</strong></li><li><strong>A white-paper</strong>: Quantizing deep convolutional networks for efficient inference. <strong>2018</strong> google</li><li><strong>ACIQ</strong>: analytical clipping for integer quantization of neural networks. <strong>ICLR2019</strong> Intel</li><li>Per-Tensor Fixed-point quantization of the back-propagation algorithm. <strong>ICLR2019</strong></li></ol>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> paper </tag>
-            
-            <tag> quantization </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>mxnet-build-from-source</title>
-      <link href="/2019/01/08/mxnet-build-from-source/"/>
-      <url>/2019/01/08/mxnet-build-from-source/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Build-MXNet-from-Source"><a href="#Build-MXNet-from-Source" class="headerlink" title="Build MXNet from Source"></a>Build MXNet from Source</h1><h2 id="Clone-the-MXNet-Project"><a href="#Clone-the-MXNet-Project" class="headerlink" title="Clone the MXNet Project"></a>Clone the MXNet Project</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --recursive https://github.com/apache/incubator-mxnet mxnet</span><br><span class="line"><span class="built_in">cd</span> mxnet</span><br></pre></td></tr></table></figure><h2 id="Download-mklcudnn"><a href="#Download-mklcudnn" class="headerlink" title="Download mklcudnn"></a>Download mklcudnn</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> 3rdparty/mkldnn/external</span><br><span class="line">wget https://github.com/intel/mkl-dnn/releases/download/v0.17.2/mklml_lnx_2019.0.1.20180928.tgz</span><br></pre></td></tr></table></figure><h2 id="Build"><a href="#Build" class="headerlink" title="Build"></a>Build</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> docs/install </span><br><span class="line">./install_mxnet_ubuntu_python.sh</span><br></pre></td></tr></table></figure><h2 id="install-python"><a href="#install-python" class="headerlink" title="install python"></a>install python</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> python</span><br><span class="line">pip install -e .</span><br></pre></td></tr></table></figure><h2 id="Add-operator-in-backend"><a href="#Add-operator-in-backend" class="headerlink" title="Add operator in backend"></a>Add operator in backend</h2><h3 id="Why-not-add-custom-operator-using-PythonOp-interface"><a href="#Why-not-add-custom-operator-using-PythonOp-interface" class="headerlink" title="Why not add custom operator using PythonOp interface."></a>Why not add custom operator using <code>PythonOp</code> interface.</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NDArrayOp</span><span class="params">(PythonOp)</span>:</span></span><br><span class="line">    <span class="string">"""Base class for numpy operators. numpy operators allow parts</span></span><br><span class="line"><span class="string">    of computation in symbolic graph to be writen in numpy. This feature</span></span><br><span class="line"><span class="string">    is intended for quickly hacking out a solution for non performance</span></span><br><span class="line"><span class="string">    critical parts. Please consider write a c++ implementation if it becomes</span></span><br><span class="line"><span class="string">    a bottleneck.</span></span><br><span class="line"><span class="string">    Note that if your operator contains internal states (like arrays),</span></span><br><span class="line"><span class="string">    it cannot be used for multi-gpu training.</span></span><br><span class="line"><span class="string">    """</span></span><br></pre></td></tr></table></figure><h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a href="https://mxnet.incubator.apache.org/install/ubuntu_setup.html#install-mxnet-for-python" target="_blank" rel="noopener">install-mxnet-for-python</a><br><a href="https://mxnet.incubator.apache.org/faq/add_op_in_backend.html" target="_blank" rel="noopener">add op in backend</a></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> MXNet </tag>
-            
-            <tag> GLUON </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>install-tensorRT</title>
-      <link href="/2018/10/26/install-tensorRT/"/>
-      <url>/2018/10/26/install-tensorRT/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Install-Driver-and-CUDA"><a href="#Install-Driver-and-CUDA" class="headerlink" title="Install Driver and CUDA"></a>Install Driver and CUDA</h1><p><a href="https://joyeeo.github.io/2018/10/18/install-cuda/">install cuda</a></p><h1 id="Install-TensorRT"><a href="#Install-TensorRT" class="headerlink" title="Install TensorRT"></a>Install TensorRT</h1><h2 id="Download-TensorRT-5-0"><a href="#Download-TensorRT-5-0" class="headerlink" title="Download TensorRT 5.0"></a>Download TensorRT 5.0</h2><p><a href="https://developer.nvidia.com/tensorrt" target="_blank" rel="noopener">tensorrt download</a></p><p>Then, I got the following package:<br><code>nv-tensorrt-repo-ubuntu1604-cuda9.0-trt5.0.0.10-rc-20180906_1-1_amd64.deb</code></p><h2 id="Install-TensorRT-5-0"><a href="#Install-TensorRT-5-0" class="headerlink" title="Install TensorRT 5.0"></a>Install TensorRT 5.0</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo dpkg -i nv-tensorrt-repo-ubuntu1604-cuda9.0-trt5.0.0.10-rc-20180906_1-1_amd64.deb</span><br><span class="line">sudo apt-key add /var/nv-tensorrt-repo-cuda9.0-trt5.0.0.10-rc-20180906/7fa2af80.pub  </span><br><span class="line">sudo apt-get update</span><br><span class="line"><span class="comment"># Unluckily, I encountered the following problem.</span></span><br><span class="line"><span class="comment">## double free or corruption (fasttop): 0x0000000001368e00 ***</span></span><br><span class="line"><span class="comment"># I solved it by run: sudo apt-get purge libappstream3 </span></span><br><span class="line">sudo apt-get install tensorrt</span><br></pre></td></tr></table></figure><h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/src/tensorrt/samples</span><br><span class="line">sudo make -j32</span><br><span class="line"><span class="built_in">cd</span> ../bin</span><br><span class="line">./samples_mnist</span><br></pre></td></tr></table></figure><p><img src="mnist.png" alt="mnist"></p><h2 id="Install-PyCUDA"><a href="#Install-PyCUDA" class="headerlink" title="Install PyCUDA"></a>Install PyCUDA</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pip install pycuda</span><br><span class="line"><span class="comment"># error</span></span><br><span class="line"><span class="comment"># In file included from src/cpp/cuda.cpp:1:0:</span></span><br><span class="line"><span class="comment">#     src/cpp/cuda.hpp:14:18: fatal error: cuda.h: No such file or directory</span></span><br><span class="line"><span class="comment">#     compilation terminated.</span></span><br><span class="line"><span class="comment">#     error: command 'gcc' failed with exit status 1</span></span><br><span class="line"><span class="built_in">export</span> PATH=/usr/<span class="built_in">local</span>/cuda/bin:<span class="variable">$PATH</span></span><br><span class="line">pip install pycuda</span><br></pre></td></tr></table></figure><h3 id="uff-custom-plugin"><a href="#uff-custom-plugin" class="headerlink" title="uff custom plugin"></a>uff custom plugin</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/src/tensorrt/samples/python/uff_custom_plugin</span><br><span class="line">mkdir build &amp;&amp; pushd build</span><br><span class="line">cmake ..</span><br><span class="line">make -j8</span><br><span class="line">python2 lenet5.py</span><br><span class="line">python2 mnist_uff_custom_plugin.py</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> cuda </tag>
-            
-            <tag> nvidia-driver </tag>
-            
-            <tag> ubuntu </tag>
-            
-            <tag> tensorRT </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>install-cuda</title>
-      <link href="/2018/10/18/install-cuda/"/>
-      <url>/2018/10/18/install-cuda/</url>
-      
-        <content type="html"><![CDATA[<h2 id="Update-etc-apt-source-list"><a href="#Update-etc-apt-source-list" class="headerlink" title="Update /etc/apt/source.list"></a>Update /etc/apt/source.list</h2><h2 id="Base-software"><a href="#Base-software" class="headerlink" title="Base software"></a>Base software</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install vim</span><br><span class="line">sudo apt-get install screen</span><br><span class="line">sudo apt-get install git</span><br><span class="line">sudo apt-get install zsh</span><br><span class="line">sh -c <span class="string">"<span class="variable">$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)</span>"</span></span><br><span class="line">sudo apt-get install htop</span><br><span class="line">sudo apt-get install graphviz</span><br><span class="line">sudo apt-get install unrar</span><br></pre></td></tr></table></figure><h2 id="CUDA9-0"><a href="#CUDA9-0" class="headerlink" title="CUDA9.0"></a>CUDA9.0</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/ict/Downloads/cuda9</span><br><span class="line"><span class="comment"># nvidia-driver</span></span><br><span class="line">sudo dpkg -i nvidia-driver-local-repo-ubuntu1604-387.34_1.0-1_amd64.deb</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install cuda-drivers</span><br><span class="line">sudo reboot</span><br><span class="line"><span class="comment"># cuda9.0</span></span><br><span class="line"><span class="built_in">cd</span> /home/ict/Downloads/cuda9</span><br><span class="line">sudo dpkg -i cuda-repo-ubuntu1604-9-0-local_9.0.176-1_amd64-deb</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install cuda</span><br><span class="line"><span class="comment"># cudnn</span></span><br><span class="line">sudo dpkg -i libcudnn7-dev_7.1.3.16-1+cuda9.0_amd64.deb</span><br><span class="line">sudo dpkg -i libcudnn7_7.1.3.16-1+cuda9.0_amd64.deb</span><br></pre></td></tr></table></figure><h2 id="Remove-CUDA"><a href="#Remove-CUDA" class="headerlink" title="Remove CUDA"></a>Remove CUDA</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get --purge remove <span class="string">"nvidia-*"</span></span><br></pre></td></tr></table></figure><h2 id="Using-the-specified-GPU"><a href="#Using-the-specified-GPU" class="headerlink" title="Using the specified GPU"></a>Using the specified GPU</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CUDA_VISIBLE_DEVICES=<span class="string">"0,1"</span></span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> cuda </tag>
-            
-            <tag> nvidia-driver </tag>
-            
-            <tag> ubuntu </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>git-command</title>
-      <link href="/2018/09/29/git-command/"/>
-      <url>/2018/09/29/git-command/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Git-command"><a href="#Git-command" class="headerlink" title="Git command"></a>Git command</h1><h2 id="update-a-forked-repo-from-remote-repo"><a href="#update-a-forked-repo-from-remote-repo" class="headerlink" title="update a forked repo from remote repo."></a>update a forked repo from remote repo.</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">git remote add upstream git@github.com:&lt;custom&gt;.git</span><br><span class="line"></span><br><span class="line">git remote -v</span><br><span class="line"></span><br><span class="line">git fetch upstream</span><br><span class="line"></span><br><span class="line">git merge upstream/master</span><br><span class="line"></span><br><span class="line">git push</span><br></pre></td></tr></table></figure><h2 id="git-合并多个commits"><a href="#git-合并多个commits" class="headerlink" title="git 合并多个commits"></a>git 合并多个commits</h2><p><a href="https://www.jianshu.com/p/964de879904a" target="_blank" rel="noopener">合并多个 Commit</a></p><h2 id="git拉取远程分支到本地"><a href="#git拉取远程分支到本地" class="headerlink" title="git拉取远程分支到本地"></a>git拉取远程分支到本地</h2><h3 id="查看远程分支"><a href="#查看远程分支" class="headerlink" title="查看远程分支"></a>查看远程分支</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -r</span><br></pre></td></tr></table></figure><h3 id="拉取远程分支到本地分支"><a href="#拉取远程分支到本地分支" class="headerlink" title="拉取远程分支到本地分支"></a>拉取远程分支到本地分支</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b 本地分支名x origin/远程分支名x</span><br></pre></td></tr></table></figure><h3 id="取消本地修改"><a href="#取消本地修改" class="headerlink" title="取消本地修改"></a>取消本地修改</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git checkout . <span class="comment">#本地所有修改的。没有的提交的，都返回到原来的状态</span></span><br><span class="line">git stash  <span class="comment">#把所有没有提交的修改暂存到stash里面。可用git stash pop回复。</span></span><br><span class="line">git reset --hard HASH <span class="comment">#返回到某个节点，不保留修改。</span></span><br><span class="line">git reset --soft HASH <span class="comment">#返回到某个节点。保留修改</span></span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> git </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>anaconda-config</title>
-      <link href="/2018/09/28/anaconda-config/"/>
-      <url>/2018/09/28/anaconda-config/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Install-anaconda-on-MacOS"><a href="#Install-anaconda-on-MacOS" class="headerlink" title="Install anaconda on MacOS"></a>Install anaconda on MacOS</h1><p><a href="https://mirrors.tuna.tsinghua.edu.cn/#" target="_blank" rel="noopener">清华镜像站</a></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash Anaconda3</span><br></pre></td></tr></table></figure><h1 id="Install-cv2"><a href="#Install-cv2" class="headerlink" title="Install cv2"></a>Install cv2</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install -c menpo opencv</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> anaconda python </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>pycaffe config </title>
-      <link href="/2018/08/27/pycaffe-config/"/>
-      <url>/2018/08/27/pycaffe-config/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h1><p>There is always some trouble when we want use <code>pycaffe</code> and <code>opencv</code> at the same time :(<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line"><span class="keyword">import</span> cv2</span><br></pre></td></tr></table></figure></p><h1 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h1><blockquote><p>We just do not use Anaconda!!!!!</p></blockquote><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> caffe/python</span><br><span class="line"><span class="keyword">for</span> req <span class="keyword">in</span> $(cat requirements.txt); <span class="keyword">do</span> pip install <span class="variable">$req</span>; <span class="keyword">done</span></span><br><span class="line">pip install opencv-python</span><br></pre></td></tr></table></figure><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os.path <span class="keyword">as</span> osp</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_path</span><span class="params">(path)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> path <span class="keyword">not</span> <span class="keyword">in</span> sys.path:</span><br><span class="line">        sys.path.insert(<span class="number">0</span>, path)</span><br><span class="line"></span><br><span class="line">caffe_path = <span class="string">'/home/zhaoxiandong/caffe'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Add caffe to PYTHONPATH</span></span><br><span class="line">caffe_path = osp.join(caffe_path, <span class="string">'python'</span>)</span><br><span class="line">add_path(caffe_path)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="comment"># successful !::::))))</span></span><br></pre></td></tr></table></figure><h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p><a href="https://github.com/NVIDIA/DIGITS/issues/156" target="_blank" rel="noopener">https://github.com/NVIDIA/DIGITS/issues/156</a></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> pycaffe </tag>
-            
-            <tag> caffe </tag>
-            
-            <tag> opencv </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>PyTorch Begin</title>
-      <link href="/2018/08/10/PyTorch-Begin/"/>
-      <url>/2018/08/10/PyTorch-Begin/</url>
-      
-        <content type="html"><![CDATA[<h2 id="Recommand-approach-for-saving-model"><a href="#Recommand-approach-for-saving-model" class="headerlink" title="Recommand approach for saving model"></a>Recommand approach for saving model</h2><p><a href="https://stackoverflow.com/questions/42703500/best-way-to-save-a-trained-model-in-pytorch" target="_blank" rel="noopener">Stack overflow</a></p><ul><li><p>First</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># save</span></span><br><span class="line">torch.save(model.state_dict(), PATH)</span><br><span class="line"><span class="comment"># load</span></span><br><span class="line">model = Model(args)</span><br><span class="line">model.load_state_dict(torch.load(PATH))</span><br></pre></td></tr></table></figure></li><li><p>Second</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># save</span></span><br><span class="line">torch.save(mode, PATH)</span><br><span class="line"><span class="comment"># load</span></span><br><span class="line">model = torch.load(PATH)</span><br></pre></td></tr></table></figure></li></ul><h3 id="Pytorch-DataParallel"><a href="#Pytorch-DataParallel" class="headerlink" title="Pytorch DataParallel"></a>Pytorch DataParallel</h3><p><a href="https://blog.csdn.net/qq_19598705/article/details/80396325" target="_blank" rel="noopener">csdn</a></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> PyTorch </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>ssh tunnel 端口转发</title>
-      <link href="/2018/08/09/ssh-tunnel-%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
-      <url>/2018/08/09/ssh-tunnel-%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Problem-description"><a href="#Problem-description" class="headerlink" title="Problem description"></a>Problem description</h1><ul><li><strong>A</strong> PC</li><li><strong>B</strong> 有公网IP的服务器或者工作站</li><li><strong>C</strong> 和<strong>B</strong>在同一个局域网的机器</li><li><strong>D</strong> 任意一台能联网的机器</li></ul><p><img src="ssh_tunnel.png" alt="img"></p><p>我们想通过PC来连接<strong>B</strong>, <strong>C</strong>, <strong>D</strong>, 从而方便的来远程同步代码，和开启jupyter-notebook服务等。</p><h1 id="ssh-command"><a href="#ssh-command" class="headerlink" title="ssh command"></a>ssh command</h1><p>主要用到了下边这条命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -N -f -L &lt;port2&gt;:&lt;ip1&gt;:&lt;port1&gt; &lt;username&gt;@&lt;ip&gt;</span><br></pre></td></tr></table></figure><ul><li><strong>N</strong> 在后台运行</li><li><strong>f</strong> Fork into background after authentication. 后台认证用户密码，通常和-N连用，不用登录到远程主机。</li><li><strong>L</strong> 本地起端口映射到其他机器</li></ul><h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><h2 id="Access-server-C-on-PC-A"><a href="#Access-server-C-on-PC-A" class="headerlink" title="Access server C on PC A"></a>Access server C on PC A</h2><p>Run on PC A:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -N -f -L &lt;A.custom.port&gt;:&lt;C.local.ip&gt;:&lt;C.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt;</span><br></pre></td></tr></table></figure></p><h2 id="Access-server-D-on-PC-A"><a href="#Access-server-D-on-PC-A" class="headerlink" title="Access server D on PC A"></a>Access server D on PC A</h2><p>Run on server D:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -CfnNt -R &lt;B.custom.port&gt;:localhost:&lt;D.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt;</span><br></pre></td></tr></table></figure></p><p>Run on PC A:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -N -f -L &lt;A.custom.port&gt;:localhost:&lt;B.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt;</span><br></pre></td></tr></table></figure></p><h2 id="A直接ssh登陆到C"><a href="#A直接ssh登陆到C" class="headerlink" title="A直接ssh登陆到C"></a>A直接ssh登陆到C</h2><p>Add the following code to <code>~/.ssh/config</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Host server</span><br><span class="line">User C.username</span><br><span class="line">Port 22</span><br><span class="line">HostName &lt;C.local.ip&gt;</span><br><span class="line">ProxyCommand ssh B.username@B.public.ip nc %h %p 2&gt; /dev/null</span><br></pre></td></tr></table></figure></p><p>Then, we can connect to server C directly.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh server</span><br></pre></td></tr></table></figure></p><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="http://blog.creke.net/722.html" target="_blank" rel="noopener">梦溪博客</a></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> ssh tunnel </tag>
-            
-            <tag> sublime </tag>
-            
-            <tag> sftp </tag>
-            
-            <tag> jupyter-notebook </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>python argparse</title>
-      <link href="/2018/08/08/python-argparse/"/>
-      <url>/2018/08/08/python-argparse/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser= argparse.ArgumentParser()</span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">''</span>)</span><br><span class="line">parser.add_argument(<span class="string">'data'</span>, metavar=<span class="string">'DIR'</span>, help=<span class="string">'path to dataset'</span>)</span><br></pre></td></tr></table></figure><h2 id="Parameter"><a href="#Parameter" class="headerlink" title="Parameter"></a>Parameter</h2><ul><li>prog - The name of the program (default: sys.argv[0])</li><li>usage - The string describing the program usage (default: generated from arguments added to parser)</li><li>description - Text to display before the argument help (default: none)</li><li>epilog - Text to display after the argument help (default: none)</li><li>parents - A list of ArgumentParser objects whose arguments should also be included</li><li>formatter_class - A class for customizing the help output</li><li>prefix_chars - The set of characters that prefix optional arguments (default: ‘-‘)</li><li>fromfile_prefix_chars - The set of characters that prefix files from which additional arguments should be read (default: None)</li><li>argument_default - The global default value for arguments (default: None)</li><li>conflict_handler - The strategy for resolving conflicting optionals (usually unnecessary)</li><li>add_help - Add a -h/–help option to the parser (default: True)</li><li>allow_abbrev - Allows long options to be abbreviated if the abbreviation is unambiguous. (default: True)</li></ul><h2 id="The-add-augment-method"><a href="#The-add-augment-method" class="headerlink" title="The add_augment() method"></a>The add_augment() method</h2><ul><li>name or flags - Either a name or a list of option strings, e.g. foo or -f, –foo.</li><li>action - The basic type of action to be taken when this argument is encountered at the command line.</li><li>nargs - The number of command-line arguments that should be consumed.</li><li>const - A constant value required by some action and nargs selections.</li><li>default - The value produced if the argument is absent from the command line.</li><li>type - The type to which the command-line argument should be converted.</li><li>choices - A container of the allowable values for the argument.</li><li>required - Whether or not the command-line option may be omitted (optionals only).</li><li>help - A brief description of what the argument does.</li><li>metavar - A name for the argument in usage messages. 有助于提醒用户，该命令行参数所期待的参数，如 metavar=”mode”</li><li>dest - The name of the attribute to be added to the object returned by parse_args().</li></ul><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://blog.csdn.net/itlance_ouyang/article/details/52489674" target="_blank" rel="noopener">Python 命令行解析</a><br><a href="https://docs.python.org/3/library/argparse.html" target="_blank" rel="noopener">python.org</a></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> python </tag>
-            
-            <tag> argparse </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>test</title>
-      <link href="/2018/08/07/test/"/>
-      <url>/2018/08/07/test/</url>
-      
-        <content type="html"><![CDATA[<h1 id="test"><a href="#test" class="headerlink" title="test"></a>test</h1><p><img src="test.jpg" alt="test"></p><p>$$<br>\begin{eqnarray}<br>\nabla\cdot\vec{E} &amp;=&amp; \frac{\rho}{\epsilon_0} \\<br>\nabla\cdot\vec{B} &amp;=&amp; 0 \\<br>\nabla\times\vec{E} &amp;=&amp; -\frac{\partial B}{\partial t} \\<br>\nabla\times\vec{B} &amp;=&amp; \mu_0\left(\vec{J}+\epsilon_0\frac{\partial E}{\partial t} \right)<br>\end{eqnarray}<br>$$</p>]]></content>
-      
-      
-      
-    </entry>
-    
-  
-  
+<search>
+  <entry>
+    <title><![CDATA[suvery-of-qcnn]]></title>
+    <url>%2F2019%2F01%2F16%2Fsuvery-of-qcnn%2F</url>
+    <content type="text"><![CDATA[Quantization AlgorithmsTruncation without re-training原理与分析将fp32的数，直接截断为8bit定点数以8bits为例，每层的权重共享一个QCode，每层的activation共享一个QCode。$$ x_q = \frac{clip(round(x_f\times 2^{qcode}), -2^7, 2^7-1)}{2^{qcode}}$$ 如何配置QCode accuracy-aware config对于分类网络来说，我们只关心它最后的分类精度，比如baseline网络在ImageNet上分类精度为70%，通过改变配置config，能够得到最后量化后的网络的分类精度。配置Qcode的指标只关心最后的分类精度。 Greedy layer-wise optimization另外，可以采用更加方便的方式，通过最小化$x_q$与$x$之间的KL散度或者MSE，来配置每层的QCode. 特点分析 运算简单，不需要重新进行训练 需要逐层配置QCode参数，耗费较多资源 QCode的量化编码方式过于简单，且Qcode只能取值为整数，对分类网络比较友好，但是对检测网络和其他类型的网络并不一定能轻松适配。 试验与结论使用这种方式进行离线量化，最后的分类网络的精度基本不会下降（千分位的变动）. DoReFa NetWRPN受到了Wide ResNet的启发，Wide ResNet减少网络的深度，扩展网络的宽度，通过重新设计了网络结构的方式来使得网络保持原有的精度。WRPN wide reduced-precision networks需要对weights和activation进行量化，相当于减少了网络的拟合能力，可以通过增加网络款宽度的方式来增加一部分参数来弥补量化带来的损失。 半成品的实现：Code 原理分析 将值限制在[-1, 1]之间 对w进行有符号量化，对a进行无符号量化$$ w_q = \frac{1}{2^{k-1}-1}round((2^{k-1}-1)\cdot w_f) \\ a_q = \frac{1}{2^{k}-1}round((2^{k}-1)\cdot a_f)$$ 特点分析 quantier的parameter是静态的，不需要像TTQ一样需要在训练中进行学习 In our work, we maintain the depth parameter same as baseline network but widen the filter maps. To be consistent with results reported in prior works, we do not quantize weights and activations of the first and last layer. 试验与结论 VNQ: Variational Network QuantizationOur method is an extension of Sparse VD 公式很多，还需要时间推导。 原理分析特点分析 The method does not require fine-tuning after quantization.可以从scratch开始训练，也可以直接使用预训练好的权重。 Results are shown for ternary quantization on LeNet-5 (MNIST) and DenseNet (CIFAR-10).只有小数据集小网络，小数据集大网络，没有大数据集和大网络，可能不具有普适性。 WAGE: Training and Inference with Integers in Deep Neural Networks官方源码：code,只包含cifar10的demo。将Weight,Activation,Gradient,Error都进行量化，量化方式采用$$ \sigma(k) = 2^{k-1}, k\in \mathbb{N_+} \\ Q(x, k) = clip(\sigma(k)\cdot round(\frac{x}{\sigma(k)}), -1+\sigma(k), 1-\sigma(k))$$ 试验与结论如果需要在AI芯片进行训练，WAGE是一个很好的研究方向；但是当前主流的做法是训练交给GPU，只需要在AI芯片上进行inference. Clip-Q: Deep network compression learning by In-Parallel Pruning Quantization We combine network pruning and weight quantization in a single learning framework 使用贝叶斯优化器来the pruning rate p and the bit budget b 只对weights进行了pruning和quantization. pruning是百分比的方式，quantization是聚类codebook的方式 试验与结论量化相关试验我认为还是比较相同bitwidth下的精度更切合实际应用，毕竟量化的作用一方面是压缩权重，更重要的还是AI芯片的inference加速，需要给出hardware friendly的分析与验证。 Bi-Real Net 较XOR-Net, BNN网络的分类accuracy有较大的提升 没有量化第一层和最后一层，并不Real:) 试验与结论 Efficient Non-uniform quantizer for quantized neural network targeting Re-configurable hardware ELQ: Explicit Loss-Error-Aware Quantization for Low-Bit Deep Neural Networks 之前的方式大多是layer-wise 最小化量化前后数值的 Error，本文建立了quantization与loss之间的关系。其实在pruning中也有类似的改进，一般大家的认为weights越小越不重要，优先prune掉，后来提出fisher pruning就是根据loss来确定pruning的策略。前者简单直接，后者理论上能找到更优的解，但实现麻烦。 只量化了weights PACT: parameterized clipping activation for quantized neural networks PACT提出Activation的量化方法，并使用DoReFa量化weight，最终训练w4a4 网络在ImageNet上仍能达到很好的accuracy，编码方式也十分简单，很值得借鉴。 仍然没有量化第一层和最后一层 原理分析 Forward quantization$$ y = PACT(x) = 0.5(|x|-|x-\alpha|+\alpha) \\ y = round(y\cdot \frac{2^k-1}{\alpha})\cdot \frac{\alpha}{2^k-1}$$这里也看出k对应的是unsigned int的位数。 Backward, STE:$$ \cfrac{\partial y_q}{\partial\alpha} = \cfrac{\partial y_q}{\partial y}\cfrac{\partial y}{\partial\alpha}\simeq \cfrac{\partial y}{\partial \alpha}$$ 试验与结论weights使用DoReFa方式量化，activations使用PACT方式量化，可以看到在ResNet18上w4a4只和baseline低了一个点。 References: paper-of-quantization nervanasystems.github.io]]></content>
+      <tags>
+        <tag>quantization</tag>
+        <tag>CNN</tag>
+        <tag>compression</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[paper-of-quantization]]></title>
+    <url>%2F2019%2F01%2F11%2Fpaper-of-quantization%2F</url>
+    <content type="text"><![CDATA[Related papers Deep learning with limited numerical precision. 2015 IBM DoReFa-Net: Training low bit-width convolutional neural networks with low bit-width gradients. 2016 XNOR-Net: ImageNet Classification using binary convolutional neural networks. 2016 washington BC: Binary connect. BNN: Binarized Neural Networks. NIPS2016 Fixed point quantization of deep convolutional networks. 2016 Hardware-oriented approximation of convolutional neural networks. ICLR2016 TWNs: Ternary weight networks. NIPS2016 ucas Quantized convolutional neural networks for mobile devices. CVPR2016 nlpr Flexpoint: an adaptive numerical format for efficient training of deep neural networks. 2017 intel INQ: Incremental network quantization, towards lossless CNNs with low-precision weights. ICLR2017 intel labs china TTQ: Trained ternary quantization. ICLR2017 stanford WRPN: wide reduced-precision networks. 2017 detailed A Survey of Model Compression and Acceleration for Deep Neural Networks. 201712 VNQ: Variational network quantization. ICLR2018 WAGE: Training and Inference with Integers in Deep Neural Networks. ICLR2018 oral tsinghua Clip-Q: Deep network compression learning by In-Parallel Pruning Quantization. CVPR2018 SFU LQ-NETs: learned quantization for highly accurate and compact deep neural networks. ECCV2018 Microsoft Bi-Real Net: Enhancing the performance of 1-bit CNNs with improved Representational capability and advanced training algorithm. ECCV2018 HKU Synergy: Algorithm-hardware co-design for convnet accelerators on embedded FPGAs. 2018 UC Berkeley Alternating multi-bit quantization for recurrent neural networks. ICLR2018 alibaba Efficient Non-uniform quantizer for quantized neural network targeting Re-configurable hardware. 2018 ELQ: Explicit loss-error-aware quantization for low-bit deep neural networks. CVPR2018 intel tsinghua From Hashing to CNNs: training Binary weights vis hashing. AAAI2018 nlpr HAQ: Hardware-Aware automated quantization. NIPS workshop2018 mit Heterogeneous Bitwidth Binarization in Convolutional Neural Networks. NIPS2018 microsoft HALP: High-Accuracy Low-Precision Training. 2018 stanford Mixed Precision Training. ICLR2018 baidu PACT: parameterized clipping activation for quantized neural networks. 2018 IBM Model Compression via distillation and quantization. ICLR2018 google Quantization and training of neural networks for efficient integer-arithmetic-only inference. CVPR2018 Google Quantized back-propagation: training binarized neural networks with quantized gradients. ICLR2018 QUENN: Quantization engine for low-power neural networks. CF18 ACM Scalable methods for 8-bits training of neural networks. NIPS2018 intel SYQ: learning symmetric quantization for efficient deep neural networks. CVPR2018 xilinx TSQ: two-step quantization for low-bit neural networks. CVPR2018 V-Quant: Value-aware quantization for training and inference of neural networks. ECCV2018 facebook UNIQ: Uniform noise injection for non-uniform quantization of neural networks. 2018 Training a binary weight object detector by knowledge transfer for autonomous driving. 2018 Training competitive binary neural networks from scratch. 2018 A white-paper: Quantizing deep convolutional networks for efficient inference. 2018 google ACIQ: analytical clipping for integer quantization of neural networks. ICLR2019 Intel Per-Tensor Fixed-point quantization of the back-propagation algorithm. ICLR2019]]></content>
+      <tags>
+        <tag>paper</tag>
+        <tag>quantization</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[mxnet-build-from-source]]></title>
+    <url>%2F2019%2F01%2F08%2Fmxnet-build-from-source%2F</url>
+    <content type="text"><![CDATA[Build MXNet from SourceClone the MXNet Project12git clone --recursive https://github.com/apache/incubator-mxnet mxnetcd mxnet Download mklcudnn12cd 3rdparty/mkldnn/externalwget https://github.com/intel/mkl-dnn/releases/download/v0.17.2/mklml_lnx_2019.0.1.20180928.tgz Build12cd docs/install ./install_mxnet_ubuntu_python.sh install python12cd pythonpip install -e . Add operator in backendWhy not add custom operator using PythonOp interface.123456789class NDArrayOp(PythonOp): """Base class for numpy operators. numpy operators allow parts of computation in symbolic graph to be writen in numpy. This feature is intended for quickly hacking out a solution for non performance critical parts. Please consider write a c++ implementation if it becomes a bottleneck. Note that if your operator contains internal states (like arrays), it cannot be used for multi-gpu training. """ Referencesinstall-mxnet-for-pythonadd op in backend]]></content>
+      <tags>
+        <tag>MXNet</tag>
+        <tag>GLUON</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[install-tensorRT]]></title>
+    <url>%2F2018%2F10%2F26%2Finstall-tensorRT%2F</url>
+    <content type="text"><![CDATA[Install Driver and CUDAinstall cuda Install TensorRTDownload TensorRT 5.0tensorrt download Then, I got the following package:nv-tensorrt-repo-ubuntu1604-cuda9.0-trt5.0.0.10-rc-20180906_1-1_amd64.deb Install TensorRT 5.01234567sudo dpkg -i nv-tensorrt-repo-ubuntu1604-cuda9.0-trt5.0.0.10-rc-20180906_1-1_amd64.debsudo apt-key add /var/nv-tensorrt-repo-cuda9.0-trt5.0.0.10-rc-20180906/7fa2af80.pub sudo apt-get update# Unluckily, I encountered the following problem.## double free or corruption (fasttop): 0x0000000001368e00 ***# I solved it by run: sudo apt-get purge libappstream3 sudo apt-get install tensorrt Demo1234cd /usr/src/tensorrt/samplessudo make -j32cd ../bin./samples_mnist Install PyCUDA12345678pip install pycuda# error# In file included from src/cpp/cuda.cpp:1:0:# src/cpp/cuda.hpp:14:18: fatal error: cuda.h: No such file or directory# compilation terminated.# error: command 'gcc' failed with exit status 1export PATH=/usr/local/cuda/bin:$PATHpip install pycuda uff custom plugin123456cd /usr/src/tensorrt/samples/python/uff_custom_pluginmkdir build &amp;&amp; pushd buildcmake ..make -j8python2 lenet5.pypython2 mnist_uff_custom_plugin.py]]></content>
+      <tags>
+        <tag>cuda</tag>
+        <tag>nvidia-driver</tag>
+        <tag>ubuntu</tag>
+        <tag>tensorRT</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[install-cuda]]></title>
+    <url>%2F2018%2F10%2F18%2Finstall-cuda%2F</url>
+    <content type="text"><![CDATA[Update /etc/apt/source.listBase software12345678sudo apt-get install vimsudo apt-get install screensudo apt-get install gitsudo apt-get install zshsh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"sudo apt-get install htopsudo apt-get install graphvizsudo apt-get install unrar CUDA9.01234567891011121314cd /home/ict/Downloads/cuda9# nvidia-driversudo dpkg -i nvidia-driver-local-repo-ubuntu1604-387.34_1.0-1_amd64.debsudo apt-get updatesudo apt-get install cuda-driverssudo reboot# cuda9.0cd /home/ict/Downloads/cuda9sudo dpkg -i cuda-repo-ubuntu1604-9-0-local_9.0.176-1_amd64-debsudo apt-get updatesudo apt-get install cuda# cudnnsudo dpkg -i libcudnn7-dev_7.1.3.16-1+cuda9.0_amd64.debsudo dpkg -i libcudnn7_7.1.3.16-1+cuda9.0_amd64.deb Remove CUDA1sudo apt-get --purge remove "nvidia-*" Using the specified GPU1CUDA_VISIBLE_DEVICES="0,1"]]></content>
+      <tags>
+        <tag>cuda</tag>
+        <tag>nvidia-driver</tag>
+        <tag>ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[git-command]]></title>
+    <url>%2F2018%2F09%2F29%2Fgit-command%2F</url>
+    <content type="text"><![CDATA[Git commandupdate a forked repo from remote repo.123456789git remote add upstream git@github.com:&lt;custom&gt;.gitgit remote -vgit fetch upstreamgit merge upstream/mastergit push git 合并多个commits合并多个 Commit git拉取远程分支到本地查看远程分支1git branch -r 拉取远程分支到本地分支1git checkout -b 本地分支名x origin/远程分支名x 取消本地修改1234git checkout . #本地所有修改的。没有的提交的，都返回到原来的状态git stash #把所有没有提交的修改暂存到stash里面。可用git stash pop回复。git reset --hard HASH #返回到某个节点，不保留修改。git reset --soft HASH #返回到某个节点。保留修改]]></content>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[anaconda-config]]></title>
+    <url>%2F2018%2F09%2F28%2Fanaconda-config%2F</url>
+    <content type="text"><![CDATA[Install anaconda on MacOS清华镜像站 1bash Anaconda3 Install cv21conda install -c menpo opencv]]></content>
+      <tags>
+        <tag>anaconda python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[pycaffe config]]></title>
+    <url>%2F2018%2F08%2F27%2Fpycaffe-config%2F</url>
+    <content type="text"><![CDATA[ProblemThere is always some trouble when we want use pycaffe and opencv at the same time :(12import caffeimport cv2 Solution We just do not use Anaconda!!!!! 123cd caffe/pythonfor req in $(cat requirements.txt); do pip install $req; donepip install opencv-python 12345678910111213141516import os.path as ospimport sysdef add_path(path): if path not in sys.path: sys.path.insert(0, path)caffe_path = '/home/zhaoxiandong/caffe'# Add caffe to PYTHONPATHcaffe_path = osp.join(caffe_path, 'python')add_path(caffe_path)import caffeimport cv2# successful !::::)))) Referenceshttps://github.com/NVIDIA/DIGITS/issues/156]]></content>
+      <tags>
+        <tag>pycaffe</tag>
+        <tag>caffe</tag>
+        <tag>opencv</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[PyTorch Begin]]></title>
+    <url>%2F2018%2F08%2F10%2FPyTorch-Begin%2F</url>
+    <content type="text"><![CDATA[Recommand approach for saving modelStack overflow First 12345# savetorch.save(model.state_dict(), PATH)# loadmodel = Model(args)model.load_state_dict(torch.load(PATH)) Second 1234# savetorch.save(mode, PATH)# loadmodel = torch.load(PATH) Pytorch DataParallelcsdn]]></content>
+      <tags>
+        <tag>PyTorch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[ssh tunnel 端口转发]]></title>
+    <url>%2F2018%2F08%2F09%2Fssh-tunnel-%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%2F</url>
+    <content type="text"><![CDATA[Problem description A PC B 有公网IP的服务器或者工作站 C 和B在同一个局域网的机器 D 任意一台能联网的机器 我们想通过PC来连接B, C, D, 从而方便的来远程同步代码，和开启jupyter-notebook服务等。 ssh command主要用到了下边这条命令： 1ssh -N -f -L &lt;port2&gt;:&lt;ip1&gt;:&lt;port1&gt; &lt;username&gt;@&lt;ip&gt; N 在后台运行 f Fork into background after authentication. 后台认证用户密码，通常和-N连用，不用登录到远程主机。 L 本地起端口映射到其他机器 ExampleAccess server C on PC ARun on PC A:1ssh -N -f -L &lt;A.custom.port&gt;:&lt;C.local.ip&gt;:&lt;C.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt; Access server D on PC ARun on server D:1ssh -CfnNt -R &lt;B.custom.port&gt;:localhost:&lt;D.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt; Run on PC A:1ssh -N -f -L &lt;A.custom.port&gt;:localhost:&lt;B.custom.port&gt; &lt;username&gt;@&lt;B.public.ip&gt; A直接ssh登陆到CAdd the following code to ~/.ssh/config12345Host serverUser C.usernamePort 22HostName &lt;C.local.ip&gt;ProxyCommand ssh B.username@B.public.ip nc %h %p 2&gt; /dev/null Then, we can connect to server C directly.1ssh server Reference梦溪博客]]></content>
+      <tags>
+        <tag>ssh tunnel</tag>
+        <tag>sublime</tag>
+        <tag>sftp</tag>
+        <tag>jupyter-notebook</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python argparse]]></title>
+    <url>%2F2018%2F08%2F08%2Fpython-argparse%2F</url>
+    <content type="text"><![CDATA[Usage1234import argparseparser= argparse.ArgumentParser()parser = argparse.ArgumentParser(description='')parser.add_argument('data', metavar='DIR', help='path to dataset') Parameter prog - The name of the program (default: sys.argv[0]) usage - The string describing the program usage (default: generated from arguments added to parser) description - Text to display before the argument help (default: none) epilog - Text to display after the argument help (default: none) parents - A list of ArgumentParser objects whose arguments should also be included formatter_class - A class for customizing the help output prefix_chars - The set of characters that prefix optional arguments (default: ‘-‘) fromfile_prefix_chars - The set of characters that prefix files from which additional arguments should be read (default: None) argument_default - The global default value for arguments (default: None) conflict_handler - The strategy for resolving conflicting optionals (usually unnecessary) add_help - Add a -h/–help option to the parser (default: True) allow_abbrev - Allows long options to be abbreviated if the abbreviation is unambiguous. (default: True) The add_augment() method name or flags - Either a name or a list of option strings, e.g. foo or -f, –foo. action - The basic type of action to be taken when this argument is encountered at the command line. nargs - The number of command-line arguments that should be consumed. const - A constant value required by some action and nargs selections. default - The value produced if the argument is absent from the command line. type - The type to which the command-line argument should be converted. choices - A container of the allowable values for the argument. required - Whether or not the command-line option may be omitted (optionals only). help - A brief description of what the argument does. metavar - A name for the argument in usage messages. 有助于提醒用户，该命令行参数所期待的参数，如 metavar=”mode” dest - The name of the attribute to be added to the object returned by parse_args(). ReferencePython 命令行解析python.org]]></content>
+      <tags>
+        <tag>python</tag>
+        <tag>argparse</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[test]]></title>
+    <url>%2F2018%2F08%2F07%2Ftest%2F</url>
+    <content type="text"><![CDATA[test $$\begin{eqnarray}\nabla\cdot\vec{E} &amp;=&amp; \frac{\rho}{\epsilon_0} \\\nabla\cdot\vec{B} &amp;=&amp; 0 \\\nabla\times\vec{E} &amp;=&amp; -\frac{\partial B}{\partial t} \\\nabla\times\vec{B} &amp;=&amp; \mu_0\left(\vec{J}+\epsilon_0\frac{\partial E}{\partial t} \right)\end{eqnarray}$$]]></content>
+  </entry>
 </search>

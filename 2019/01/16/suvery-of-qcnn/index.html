@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/bi_real_result.png">
 <meta property="og:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/non_uniform.png">
 <meta property="og:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/pact_result.png">
-<meta property="og:updated_time" content="2019-01-16T12:15:15.611Z">
+<meta property="og:updated_time" content="2019-01-18T01:33:25.246Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="suvery-of-qcnn">
 <meta name="twitter:description" content="Quantization AlgorithmsTruncation without re-training原理与分析将fp32的数，直接截断为8bit定点数以8bits为例，每层的权重共享一个QCode，每层的activation共享一个QCode。$$    x_q = \frac{clip(round(x_f\times 2^{qcode}), -2^7, 2^7-1)}{2^{qcode}}">
@@ -426,7 +426,7 @@
 <li>仍然没有量化第一层和最后一层</li>
 </ol>
 <h3 id="原理分析-2"><a href="#原理分析-2" class="headerlink" title="原理分析"></a>原理分析</h3><ol>
-<li>Forward quantization<br>$$<br> y = PACT(x) = 0.5(|x|-|x-\alpha|+\alpha) \\<br> y = round(y\cdot \frac{2^k-1}{\alpha})\cdot \frac{\alpha}{2^k-1}<br>$$</li>
+<li>Forward quantization<br>$$<br> y = PACT(x) = 0.5(|x|-|x-\alpha|+\alpha) \\<br> y = round(y\cdot \frac{2^k-1}{\alpha})\cdot \frac{\alpha}{2^k-1}<br>$$<br>这里也看出k对应的是unsigned int的位数。</li>
 <li>Backward, STE:<br>$$<br> \cfrac{\partial y_q}{\partial\alpha} = \cfrac{\partial y_q}{\partial y}\cfrac{\partial y}{\partial\alpha}\simeq \cfrac{\partial y}{\partial \alpha}<br>$$</li>
 </ol>
 <h3 id="试验与结论-5"><a href="#试验与结论-5" class="headerlink" title="试验与结论"></a>试验与结论</h3><p><img src="pact_result.png" alt="pact_result.png"><br>weights使用DoReFa方式量化，activations使用PACT方式量化，可以看到在ResNet18上w4a4只和baseline低了一个点。</p>
