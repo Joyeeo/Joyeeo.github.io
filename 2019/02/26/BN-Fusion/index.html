@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="PyTorch,Batch Normalization," />
 
 
 
@@ -79,17 +79,20 @@
 
 
 
-<meta name="description" content="Joey&apos;s person blog">
-<meta name="keywords" content="AI DL NLP">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Joey&#39;s note">
-<meta property="og:url" content="http://joyeeo.github.io/tags/quantization/index.html">
+<meta name="description" content="引言在PyTorch中，我们常在网络中遇到BN层，基本单元如果如下所示，则可以离线将Conv和BN进行fusion，从而在inference时不必计算BN。  在PyTorch中BatchNorm2d的定义如下：1class torch.nn.BatchNorm2d(num_features, eps=1e-05, momentum=0.1, affine=True, track_running_">
+<meta name="keywords" content="PyTorch,Batch Normalization">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BN_Fusion">
+<meta property="og:url" content="http://joyeeo.github.io/2019/02/26/BN-Fusion/index.html">
 <meta property="og:site_name" content="Joey&#39;s note">
-<meta property="og:description" content="Joey&apos;s person blog">
+<meta property="og:description" content="引言在PyTorch中，我们常在网络中遇到BN层，基本单元如果如下所示，则可以离线将Conv和BN进行fusion，从而在inference时不必计算BN。  在PyTorch中BatchNorm2d的定义如下：1class torch.nn.BatchNorm2d(num_features, eps=1e-05, momentum=0.1, affine=True, track_running_">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://joyeeo.github.io/2019/02/26/BN-Fusion/conv_bn.svg">
+<meta property="og:updated_time" content="2019-02-26T13:18:23.486Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Joey&#39;s note">
-<meta name="twitter:description" content="Joey&apos;s person blog">
+<meta name="twitter:title" content="BN_Fusion">
+<meta name="twitter:description" content="引言在PyTorch中，我们常在网络中遇到BN层，基本单元如果如下所示，则可以离线将Conv和BN进行fusion，从而在inference时不必计算BN。  在PyTorch中BatchNorm2d的定义如下：1class torch.nn.BatchNorm2d(num_features, eps=1e-05, momentum=0.1, affine=True, track_running_">
+<meta name="twitter:image" content="http://joyeeo.github.io/2019/02/26/BN-Fusion/conv_bn.svg">
 
 
 
@@ -119,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://joyeeo.github.io/tags/quantization/"/>
+  <link rel="canonical" href="http://joyeeo.github.io/2019/02/26/BN-Fusion/"/>
 
 
 
 
 
-  <title>Tag: quantization | Joey's note</title>
+  <title>BN_Fusion | Joey's note</title>
   
 
 
@@ -144,7 +147,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -272,82 +275,201 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>quantization<small>Tag</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joyeeo.github.io/2019/02/26/BN-Fusion/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="hustzxd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey's note">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/01/16/suvery-of-qcnn/" itemprop="url">
-              
-                <span itemprop="name">suvery-of-qcnn</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">BN_Fusion</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-01-16T19:55:13+08:00"
-              content="2019-01-16" >
-          01-16
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-26T21:18:23+08:00">
+                2019-02-26
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/26/BN-Fusion/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/02/26/BN-Fusion/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
+      
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/01/11/paper-of-quantization/" itemprop="url">
-              
-                <span itemprop="name">paper-of-quantization</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-01-11T17:20:22+08:00"
-              content="2019-01-11" >
-          01-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>在PyTorch中，我们常在网络中遇到BN层，基本单元如果如下所示，则可以离线将Conv和BN进行fusion，从而在inference时不必计算BN。</p>
+<p><img src="conv_bn.svg" alt="conv_bn"></p>
+<p>在PyTorch中<code>BatchNorm2d</code>的定义如下：<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">torch</span>.<span class="title">nn</span>.<span class="title">BatchNorm2d</span><span class="params">(num_features, eps=<span class="number">1e-05</span>, momentum=<span class="number">0.1</span>, affine=True, track_running_stats=True)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>参数列表如下：<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dict_keys([<span class="string">'weight'</span>, <span class="string">'bias'</span>, <span class="string">'running_mean'</span>, <span class="string">'running_var'</span>, <span class="string">'num_batches_tracked'</span>])</span><br></pre></td></tr></table></figure></p>
+<p>与公式中变量的对应关系为：</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Variable name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eps</td>
+<td>$\epsilon$</td>
+</tr>
+<tr>
+<td>weight</td>
+<td>$\gamma$</td>
+</tr>
+<tr>
+<td>bias</td>
+<td>$\beta$</td>
+</tr>
+<tr>
+<td>running_mean</td>
+<td>$\mu$</td>
+</tr>
+<tr>
+<td>running_var</td>
+<td>$\sigma^2$</td>
+</tr>
+</tbody>
+</table>
+<h1 id="Key-Idea"><a href="#Key-Idea" class="headerlink" title="Key Idea"></a>Key Idea</h1><p>Convolution layer:<br>$$<br>    Y = X * w + b<br>$$<br>BatchNorm layer:<br>$$<br>    Y = \frac{X - \mu}{\sqrt{\sigma^2 + \epsilon}}  \gamma + \beta<br>$$ </p>
+<p>Convolution and BatchNorm fusion:</p>
+<p>$$<br>    Y = \frac{(X * w + b) - \mu}{\sqrt{\sigma^2 + \epsilon}}  \gamma + \beta \\<br>    Y = \frac{\gamma w}{\sqrt{\sigma^2 + \epsilon}}X + \frac{b - \mu}{\sqrt{\sigma^2 + \epsilon}}\gamma + \beta \\<br>    w_{merged} = aw; \quad<br>    b_{merged} = (b - \mu)a + \beta; \quad<br>    a = \frac{\gamma}{\sqrt{\sigma^2 + \epsilon}}<br>$$</p>
+<h1 id="References"><a href="#References" class="headerlink" title="References:"></a>References:</h1><ol>
+<li><a href="https://pytorch.org/docs/stable/nn.html?highlight=batchnorm#torch.nn.BatchNorm2d" target="_blank" rel="noopener">Docs: torch.nn.BatchNorm2d</a></li>
+<li><a href="https://www.jianshu.com/p/e042d693f3fb" target="_blank" rel="noopener">BN层合并原理及实现</a></li>
+</ol>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PyTorch/" rel="tag"># PyTorch</a>
+          
+            <a href="/tags/Batch-Normalization/" rel="tag"># Batch Normalization</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/16/suvery-of-qcnn/" rel="next" title="suvery-of-qcnn">
+                <i class="fa fa-chevron-left"></i> suvery-of-qcnn
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -355,6 +477,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -375,8 +511,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -431,6 +576,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Key-Idea"><span class="nav-number">2.</span> <span class="nav-text">Key Idea</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">3.</span> <span class="nav-text">References:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -571,6 +732,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -588,6 +753,18 @@
       <script id="dsq-count-scr" src="https://joyee.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://joyeeo.github.io/2019/02/26/BN-Fusion/';
+          this.page.identifier = '2019/02/26/BN-Fusion/';
+          this.page.title = 'BN_Fusion';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://joyee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
