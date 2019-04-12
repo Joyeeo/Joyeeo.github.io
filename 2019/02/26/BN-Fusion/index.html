@@ -88,7 +88,7 @@
 <meta property="og:description" content="引言在PyTorch中，我们常在网络中遇到BN层，基本单元如果如下所示，则可以离线将Conv和BN进行fusion，从而在inference时不必计算BN。  在PyTorch中BatchNorm2d的定义如下：1class torch.nn.BatchNorm2d(num_features, eps=1e-05, momentum=0.1, affine=True, track_running_">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://joyeeo.github.io/2019/02/26/BN-Fusion/conv_bn.svg">
-<meta property="og:updated_time" content="2019-02-26T13:18:23.486Z">
+<meta property="og:updated_time" content="2019-04-11T13:28:34.365Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BN_Fusion">
 <meta name="twitter:description" content="引言在PyTorch中，我们常在网络中遇到BN层，基本单元如果如下所示，则可以离线将Conv和BN进行fusion，从而在inference时不必计算BN。  在PyTorch中BatchNorm2d的定义如下：1class torch.nn.BatchNorm2d(num_features, eps=1e-05, momentum=0.1, affine=True, track_running_">
@@ -405,6 +405,31 @@
 <h1 id="Key-Idea"><a href="#Key-Idea" class="headerlink" title="Key Idea"></a>Key Idea</h1><p>Convolution layer:<br>$$<br>    Y = X * w + b<br>$$<br>BatchNorm layer:<br>$$<br>    Y = \frac{X - \mu}{\sqrt{\sigma^2 + \epsilon}}  \gamma + \beta<br>$$ </p>
 <p>Convolution and BatchNorm fusion:</p>
 <p>$$<br>    Y = \frac{(X * w + b) - \mu}{\sqrt{\sigma^2 + \epsilon}}  \gamma + \beta \\<br>    Y = \frac{\gamma w}{\sqrt{\sigma^2 + \epsilon}}X + \frac{b - \mu}{\sqrt{\sigma^2 + \epsilon}}\gamma + \beta \\<br>    w_{merged} = aw; \quad<br>    b_{merged} = (b - \mu)a + \beta; \quad<br>    a = \frac{\gamma}{\sqrt{\sigma^2 + \epsilon}}<br>$$</p>
+<h2 id="Uniform-Quantization"><a href="#Uniform-Quantization" class="headerlink" title="Uniform Quantization"></a>Uniform Quantization</h2><p>$$r = Sq$$ where constants $S$ is quantization parameter, intergers $q$ are mapped to real numbers $r$.</p>
+<table>
+<thead>
+<tr>
+<th>param</th>
+<th></th>
+<th>type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S</td>
+<td>Scale</td>
+<td>fp32</td>
+</tr>
+<tr>
+<td>q</td>
+<td>quantize</td>
+<td>int4 for w int5 for a</td>
+</tr>
+</tbody>
+</table>
+<p>Quantized convolution layer:<br>$$<br>    Y = X * Sw_q + b \\<br>    where: w = Sw_q<br>$$</p>
+<p>Quantized convolution and BatchNorm fusion:</p>
+<p>$$<br>    Y = \frac{(X * Sw_q + b) - \mu}{\sqrt{\sigma^2 + \epsilon}}  \gamma + \beta \\<br>    Y = \frac{\gamma Sw_q}{\sqrt{\sigma^2 + \epsilon}}X + \frac{b - \mu}{\sqrt{\sigma^2 + \epsilon}}\gamma + \beta \\<br>    S_{merged} = aS; \quad<br>    w_{merged} = aw; \quad<br>    b_{merged} = (b - \mu)a + \beta; \quad<br>    a = \frac{\gamma}{\sqrt{\sigma^2 + \epsilon}}<br>$$</p>
 <h1 id="References"><a href="#References" class="headerlink" title="References:"></a>References:</h1><ol>
 <li><a href="https://pytorch.org/docs/stable/nn.html?highlight=batchnorm#torch.nn.BatchNorm2d" target="_blank" rel="noopener">Docs: torch.nn.BatchNorm2d</a></li>
 <li><a href="https://www.jianshu.com/p/e042d693f3fb" target="_blank" rel="noopener">BN层合并原理及实现</a></li>
@@ -450,6 +475,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/12/paper-note-Tensorflow-Lite-Speeding-up-mobile-inference-with-low-precision/" rel="prev" title="Paper note: Tensorflow Lite: Speeding up mobile inference with low precision">
+                Paper note: Tensorflow Lite: Speeding up mobile inference with low precision <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -530,7 +559,7 @@
                 alt="hustzxd" />
             
               <p class="site-author-name" itemprop="name">hustzxd</p>
-              <p class="site-description motion-element" itemprop="description">Joey's person blog</p>
+              <p class="site-description motion-element" itemprop="description">zhaoxiandong27@gmail.com</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -540,7 +569,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -553,7 +582,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -586,7 +615,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Key-Idea"><span class="nav-number">2.</span> <span class="nav-text">Key Idea</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">3.</span> <span class="nav-text">References:</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Key-Idea"><span class="nav-number">2.</span> <span class="nav-text">Key Idea</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Uniform-Quantization"><span class="nav-number">2.1.</span> <span class="nav-text">Uniform Quantization</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">3.</span> <span class="nav-text">References:</span></a></li></ol></div>
             
 
           </div>
