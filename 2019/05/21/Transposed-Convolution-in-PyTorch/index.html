@@ -91,7 +91,7 @@
 <meta property="og:image" content="http://joyeeo.github.io/2019/05/21/Transposed-Convolution-in-PyTorch/IMG_0241.jpg">
 <meta property="og:image" content="http://joyeeo.github.io/2019/05/21/Transposed-Convolution-in-PyTorch/IMG_0242.jpg">
 <meta property="og:image" content="http://joyeeo.github.io/2019/05/21/Transposed-Convolution-in-PyTorch/IMG_0243.jpg">
-<meta property="og:updated_time" content="2019-06-02T14:27:34.632Z">
+<meta property="og:updated_time" content="2019-06-24T03:31:48.277Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Transposed Convolution in PyTorch">
 <meta name="twitter:description" content="引言Convolution运算的一些参数我们结合图示比较容易理解，卷积核在feature map中滑动，对应元素乘加得到输出。但是Transposed Convolution具体是怎么运算的，其中的参数配置又有什么具体的作用，需要我们初学者深入研究一下。 如图所示，对于Convolution来说，下层为输入，上层为输出；对于Transposed Convolution来说，为Convolution">
@@ -295,9 +295,9 @@
     <link itemprop="mainEntityOfPage" href="http://joyeeo.github.io/2019/05/21/Transposed-Convolution-in-PyTorch/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="我是个mode感情的杀手">
+      <meta itemprop="name" content="hustzxd">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/60_180314162216_1.jpg">
+      <meta itemprop="image" content="/images/IMG_1242.JPG">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -415,7 +415,7 @@
 </tr>
 </tbody>
 </table>
-<p>$$<br>L_{out} = L_{in} * s - 2 \times p + d \times (k - 1) + op + 1<br>$$</p>
+<p>$$<br>L_{out} = (L_{in} - 1) * s - 2 \times p + d \times (k - 1) + op + 1<br>$$</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">14</span>]: deconv</span><br><span class="line">Out[<span class="number">14</span>]: ConvTranspose1d(<span class="number">1</span>, <span class="number">1</span>, kernel_size=(<span class="number">3</span>,), stride=(<span class="number">1</span>,), bias=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">15</span>]: x</span><br><span class="line">Out[<span class="number">15</span>]: tensor([[[<span class="number">1.</span>, <span class="number">1.</span>]]])</span><br><span class="line"></span><br><span class="line">In [<span class="number">16</span>]: deconv.weight</span><br><span class="line">Out[<span class="number">16</span>]: </span><br><span class="line">Parameter containing:</span><br><span class="line">tensor([[[<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>]]], requires_grad=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">17</span>]: y = deconv(x)</span><br><span class="line"></span><br><span class="line">In [<span class="number">18</span>]: y</span><br><span class="line">Out[<span class="number">18</span>]: tensor([[[<span class="number">1.</span>, <span class="number">2.</span>, <span class="number">2.</span>, <span class="number">1.</span>]]], grad_fn=&lt;SqueezeBackward1&gt;)</span><br></pre></td></tr></table></figure>
 <p><img src="IMG_0241.jpg" width="20%" height="20%"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">22</span>]: x</span><br><span class="line">Out[<span class="number">22</span>]: tensor([[[<span class="number">1.</span>, <span class="number">1.</span>]]])</span><br><span class="line"></span><br><span class="line">In [<span class="number">23</span>]: deconv</span><br><span class="line">Out[<span class="number">23</span>]: ConvTranspose1d(<span class="number">1</span>, <span class="number">1</span>, kernel_size=(<span class="number">3</span>,), stride=(<span class="number">2</span>,), bias=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">24</span>]: deconv.weight</span><br><span class="line">Out[<span class="number">24</span>]: </span><br><span class="line">Parameter containing:</span><br><span class="line">tensor([[[<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>]]], requires_grad=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">25</span>]: y = deconv(x)</span><br><span class="line"></span><br><span class="line">In [<span class="number">26</span>]: y</span><br><span class="line">Out[<span class="number">26</span>]: tensor([[[<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">2.</span>, <span class="number">1.</span>, <span class="number">1.</span>]]], grad_fn=&lt;SqueezeBackward1&gt;)</span><br></pre></td></tr></table></figure>
@@ -544,11 +544,11 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/images/60_180314162216_1.jpg"
-                alt="我是个mode感情的杀手" />
+                src="/images/IMG_1242.JPG"
+                alt="hustzxd" />
             
-              <p class="site-author-name" itemprop="name">我是个mode感情的杀手</p>
-              <p class="site-description motion-element" itemprop="description">https://github.com/hustzxd</p>
+              <p class="site-author-name" itemprop="name">hustzxd</p>
+              <p class="site-description motion-element" itemprop="description">卡西法，咱们做个交换吧</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -571,7 +571,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -581,6 +581,22 @@
 
           
 
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hustzxd" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:zhaoxiandong27@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
           
 
           
@@ -624,11 +640,11 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">我是个mode感情的杀手</span>
+  <span class="author" itemprop="copyrightHolder">hustzxd</span>
 
   
 </div>

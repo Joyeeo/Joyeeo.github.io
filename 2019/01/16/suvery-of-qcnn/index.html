@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/bi_real_result.png">
 <meta property="og:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/non_uniform.png">
 <meta property="og:image" content="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/pact_result.png">
-<meta property="og:updated_time" content="2019-01-18T01:33:25.246Z">
+<meta property="og:updated_time" content="2019-07-01T02:42:52.866Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="suvery-of-qcnn">
 <meta name="twitter:description" content="Quantization AlgorithmsTruncation without re-training原理与分析将fp32的数，直接截断为8bit定点数以8bits为例，每层的权重共享一个QCode，每层的activation共享一个QCode。$$    x_q = \frac{clip(round(x_f\times 2^{qcode}), -2^7, 2^7-1)}{2^{qcode}}">
@@ -298,9 +298,9 @@
     <link itemprop="mainEntityOfPage" href="http://joyeeo.github.io/2019/01/16/suvery-of-qcnn/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="我是个mode感情的杀手">
+      <meta itemprop="name" content="hustzxd">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/60_180314162216_1.jpg">
+      <meta itemprop="image" content="/images/IMG_1242.JPG">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -385,16 +385,20 @@
 <li>QCode的量化编码方式过于简单，且Qcode只能取值为整数，对分类网络比较友好，但是对检测网络和其他类型的网络并不一定能轻松适配。</li>
 </ol>
 <h3 id="试验与结论"><a href="#试验与结论" class="headerlink" title="试验与结论"></a>试验与结论</h3><p>使用这种方式进行离线量化，最后的分类网络的精度基本不会下降（千分位的变动）.</p>
-<h2 id="DoReFa-Net"><a href="#DoReFa-Net" class="headerlink" title="DoReFa Net"></a>DoReFa Net</h2><h2 id="WRPN"><a href="#WRPN" class="headerlink" title="WRPN"></a>WRPN</h2><p>受到了Wide ResNet的启发，Wide ResNet减少网络的深度，扩展网络的宽度，通过重新设计了网络结构的方式来使得网络保持原有的精度。<strong>WRPN</strong> wide reduced-precision networks需要对weights和activation进行量化，相当于减少了网络的拟合能力，可以通过增加网络款宽度的方式来增加一部分参数来弥补量化带来的损失。</p>
+<h2 id="DoReFa-Net"><a href="#DoReFa-Net" class="headerlink" title="DoReFa Net"></a>DoReFa Net</h2><p>For weights:<br>$$<br>    w^k = 2 quantize_k(\frac{\tanh(w_i)}{2 \max(|\tanh(w_i)|)} + \frac{1}{2}) - 1<br>$$<br>uniform quantization :( 为什么不直接使用clip函数，明明最后用的是[-1, 1]之间的数值，$tanh$的作用感觉也没有那么大；在某些已经训练好的网络中，weight的分布可能是非常集中在0附近的，如果仍然使用这个映射方式，就导致该层的weight分布强行被拉到[-1, 1]之间，那该层的功能性是不是就改变了？这是不是 DoReFa类型的量化对 first and last layer 敏感的原因呢？<br>For activations:<br>$$<br>    a^k = quantize_k(clip(r, 0, 1))<br>$$<br>uniform quantization :(</p>
+<h2 id="Towards-Effective-Low-bitwidth-Convolutional-Neural-Networks"><a href="#Towards-Effective-Low-bitwidth-Convolutional-Neural-Networks" class="headerlink" title="Towards Effective Low-bitwidth Convolutional Neural Networks"></a>Towards Effective Low-bitwidth Convolutional Neural Networks</h2><p>The quantization equation:<br>$$<br>    z_q = Q(z_r) = \frac{1}{2^k - 1}round((2^k - 1)z_r)<br>$$<br>where $z_r \in [0, 1]$ denotes the full-precision value and $z_q \in [0, 1]$denotes the quantized value.</p>
+<p>For weights:<br>$$<br>    w_q = Q(\frac{\tanh(w)}{2\max(|\tanh(w)|)} + \frac{1}{2})<br>$$<br>应该是paper中写错了，最后应该和DoFeFa的量化方式一样<br>For activation:<br>$$<br>    x_q = Q(clip(x, 0, 1))<br>$$<br>Paper 主要做了一下几组实验：<br><strong>TS</strong> Two step: quantize weight =&gt; quantize activation<br><strong>PQ</strong> Progressive quantization: quantization from higher precisions to lower precisions<br><strong>Guided</strong> Teacher student training.</p>
+<h2 id="WRPN"><a href="#WRPN" class="headerlink" title="WRPN"></a>WRPN</h2><p>受到了Wide ResNet的启发，Wide ResNet减少网络的深度，扩展网络的宽度，通过重新设计了网络结构的方式来使得网络保持原有的精度。<strong>WRPN</strong> wide reduced-precision networks需要对weights和activation进行量化，相当于减少了网络的拟合能力，可以通过增加网络宽度的方式来增加一部分参数来弥补量化带来的损失。</p>
 <p>半成品的实现：<a href="https://nervanasystems.github.io/distiller/algo_quantization/index.html" target="_blank" rel="noopener">Code</a></p>
 <h3 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h3><ol>
-<li>将值限制在[-1, 1]之间</li>
+<li>对w进行[-1, 1]截断，对a进行[0, 1]截断，截断使用<a href="https://www.tensorflow.org/api_docs/python/tf/clip_by_value" target="_blank" rel="noopener">clip_by_value</a>函数；</li>
 <li>对w进行有符号量化，对a进行无符号量化<br>$$<br> w_q = \frac{1}{2^{k-1}-1}round((2^{k-1}-1)\cdot w_f) \\<br> a_q = \frac{1}{2^{k}-1}round((2^{k}-1)\cdot a_f)<br>$$</li>
 </ol>
 <h3 id="特点分析-1"><a href="#特点分析-1" class="headerlink" title="特点分析"></a>特点分析</h3><ol>
 <li>quantier的parameter是静态的，不需要像TTQ一样需要在训练中进行学习</li>
 <li><code>In our work, we maintain the depth parameter same as baseline network but widen the filter maps.</code></li>
 <li><code>To be consistent with results reported in prior works, we do not quantize weights and activations of the first and last layer.</code></li>
+<li>最后是在Intel Arria 10 进行了FPGA的实现，<a href="https://arxiv.org/pdf/1806.11547.pdf" target="_blank" rel="noopener">Exploration of Low Numeric Precision Deep Learning Inference Using Intel ® FPGAs</a>论文中又有了更加详细的实现细节。</li>
 </ol>
 <h3 id="试验与结论-1"><a href="#试验与结论-1" class="headerlink" title="试验与结论"></a>试验与结论</h3><p><img src="WRPN_result.png" alt="resnet"></p>
 <h2 id="VNQ-Variational-Network-Quantization"><a href="#VNQ-Variational-Network-Quantization" class="headerlink" title="VNQ: Variational Network Quantization"></a>VNQ: Variational Network Quantization</h2><p><code>Our method is an extension of Sparse VD</code> 公式很多，还需要时间推导。</p>
@@ -425,10 +429,16 @@
 <li>仍然没有量化第一层和最后一层</li>
 </ol>
 <h3 id="原理分析-2"><a href="#原理分析-2" class="headerlink" title="原理分析"></a>原理分析</h3><ol>
-<li>Forward quantization<br>$$<br> y = PACT(x) = 0.5(|x|-|x-\alpha|+\alpha) \\<br> y = round(y\cdot \frac{2^k-1}{\alpha})\cdot \frac{\alpha}{2^k-1}<br>$$<br>这里也看出k对应的是unsigned int的位数。</li>
+<li>Forward quantization<br>$$<br> y = PACT(x) = 0.5(|x|-|x-\alpha|+\alpha) \\<br> y = round(y\cdot \frac{2^k-1}{\alpha})\cdot \frac{\alpha}{2^k-1}<br>$$<br>这里也看出k对应的是unsigned int的位数。<br>在ResNet的bottle net中，含有没有ReLU的feature map, 在一些比较常用的物体检测网络比如YOLO中，采用了leacky ReLU, 在PACT中，并没有对其进行特殊的考虑(它只考虑了无符号的情况)。</li>
 <li>Backward, STE:<br>$$<br> \cfrac{\partial y_q}{\partial\alpha} = \cfrac{\partial y_q}{\partial y}\cfrac{\partial y}{\partial\alpha}\simeq \cfrac{\partial y}{\partial \alpha}<br>$$</li>
 </ol>
 <h3 id="试验与结论-5"><a href="#试验与结论-5" class="headerlink" title="试验与结论"></a>试验与结论</h3><p><img src="pact_result.png" alt="pact_result.png"><br>weights使用DoReFa方式量化，activations使用PACT方式量化，可以看到在ResNet18上w4a4只和baseline低了一个点。</p>
+<h2 id="HWGQ-Deep-Learning-with-Low-Precision-by-Half-wave-Gaussian-Quantization-CVPR2017"><a href="#HWGQ-Deep-Learning-with-Low-Precision-by-Half-wave-Gaussian-Quantization-CVPR2017" class="headerlink" title="HWGQ: Deep Learning with Low Precision by Half-wave Gaussian Quantization. CVPR2017"></a>HWGQ: Deep Learning with Low Precision by Half-wave Gaussian Quantization. CVPR2017</h2><p>主要是w1a2</p>
+<h2 id="FQN-Fully-Quantized-Network-for-Object-Detection-CVPR2019"><a href="#FQN-Fully-Quantized-Network-for-Object-Detection-CVPR2019" class="headerlink" title="FQN: Fully Quantized Network for Object Detection. CVPR2019"></a>FQN: Fully Quantized Network for Object Detection. CVPR2019</h2><p>主要在物体检测网络上进行了w4a4的量化实验，效果比较好</p>
+<p>$$<br>    X^Q = Q_k(X^R)\in\{q_0, q_1, q_2, \dots, q_{2^k-1}\} \\<br>    X^Q = \Delta(X^I - z) \\<br>    lb = q_0, ub = q_{2^k-1} \\<br>    \Delta = \frac{ub - lb}{2^k-1}<br>$$</p>
+<p>For weight:<br>$$<br>    lb = \min(W) \\<br>    ub = \max(W)<br>$$</p>
+<p>For activation:<br>$$<br>    lb^l_{EMA} = EMA(\min(A), \gamma=0.999) \\<br>    ub^l_{EMA} = EMA(\max(A), \gamma=0.999)<br>$$<br>为了减少activation的波动性，作者将bn freeze住，并在后续的实验部分验证了做法的有效性。<br>具体做法为，将bn的参数修正到与之对应的conv和fc的weight和bias中，量化时是对修正后的$weight_{merged}$进行量化，训练时更新weight，而不是更新$weight_{merged}$</p>
+<p>如何integer only计算卷积<br>$$<br>    y = Q_k(A^R)\times Q_k(W^R) \\<br>      = \Delta_a(A^I - z_a) \times \Delta_w(W^I - z_w) \\<br>      = \Delta_a  \Delta_w (A^I W^I - A^I z_w - W^I z_a + z_a z_w)<br>$$</p>
 <h1 id="References"><a href="#References" class="headerlink" title="References:"></a>References:</h1><ol>
 <li><a href="https://joyeeo.github.io/2019/01/11/paper-of-quantization/">paper-of-quantization</a></li>
 <li><a href="https://nervanasystems.github.io/distiller/algo_quantization/index.html" target="_blank" rel="noopener">nervanasystems.github.io</a></li>
@@ -549,11 +559,11 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/images/60_180314162216_1.jpg"
-                alt="我是个mode感情的杀手" />
+                src="/images/IMG_1242.JPG"
+                alt="hustzxd" />
             
-              <p class="site-author-name" itemprop="name">我是个mode感情的杀手</p>
-              <p class="site-description motion-element" itemprop="description">https://github.com/hustzxd</p>
+              <p class="site-author-name" itemprop="name">hustzxd</p>
+              <p class="site-description motion-element" itemprop="description">卡西法，咱们做个交换吧</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -576,7 +586,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -586,6 +596,22 @@
 
           
 
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hustzxd" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:zhaoxiandong27@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
           
 
           
@@ -609,7 +635,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Quantization-Algorithms"><span class="nav-number">1.</span> <span class="nav-text">Quantization Algorithms</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Truncation-without-re-training"><span class="nav-number">1.1.</span> <span class="nav-text">Truncation without re-training</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理与分析"><span class="nav-number">1.1.1.</span> <span class="nav-text">原理与分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何配置QCode"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">如何配置QCode</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特点分析"><span class="nav-number">1.1.2.</span> <span class="nav-text">特点分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论"><span class="nav-number">1.1.3.</span> <span class="nav-text">试验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DoReFa-Net"><span class="nav-number">1.2.</span> <span class="nav-text">DoReFa Net</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WRPN"><span class="nav-number">1.3.</span> <span class="nav-text">WRPN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理分析"><span class="nav-number">1.3.1.</span> <span class="nav-text">原理分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特点分析-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">特点分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论-1"><span class="nav-number">1.3.3.</span> <span class="nav-text">试验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VNQ-Variational-Network-Quantization"><span class="nav-number">1.4.</span> <span class="nav-text">VNQ: Variational Network Quantization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理分析-1"><span class="nav-number">1.4.1.</span> <span class="nav-text">原理分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特点分析-2"><span class="nav-number">1.4.2.</span> <span class="nav-text">特点分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WAGE-Training-and-Inference-with-Integers-in-Deep-Neural-Networks"><span class="nav-number">1.5.</span> <span class="nav-text">WAGE: Training and Inference with Integers in Deep Neural Networks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论-2"><span class="nav-number">1.5.1.</span> <span class="nav-text">试验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Clip-Q-Deep-network-compression-learning-by-In-Parallel-Pruning-Quantization"><span class="nav-number">1.6.</span> <span class="nav-text">Clip-Q: Deep network compression learning by In-Parallel Pruning Quantization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论-3"><span class="nav-number">1.6.1.</span> <span class="nav-text">试验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bi-Real-Net"><span class="nav-number">1.7.</span> <span class="nav-text">Bi-Real Net</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论-4"><span class="nav-number">1.7.1.</span> <span class="nav-text">试验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Efficient-Non-uniform-quantizer-for-quantized-neural-network-targeting-Re-configurable-hardware"><span class="nav-number">1.8.</span> <span class="nav-text">Efficient Non-uniform quantizer for quantized neural network targeting Re-configurable hardware</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ELQ-Explicit-Loss-Error-Aware-Quantization-for-Low-Bit-Deep-Neural-Networks"><span class="nav-number">1.9.</span> <span class="nav-text">ELQ: Explicit Loss-Error-Aware Quantization for Low-Bit Deep Neural Networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PACT-parameterized-clipping-activation-for-quantized-neural-networks"><span class="nav-number">1.10.</span> <span class="nav-text">PACT: parameterized clipping activation for quantized neural networks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理分析-2"><span class="nav-number">1.10.1.</span> <span class="nav-text">原理分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论-5"><span class="nav-number">1.10.2.</span> <span class="nav-text">试验与结论</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">2.</span> <span class="nav-text">References:</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Quantization-Algorithms"><span class="nav-number">1.</span> <span class="nav-text">Quantization Algorithms</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Truncation-without-re-training"><span class="nav-number">1.1.</span> <span class="nav-text">Truncation without re-training</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理与分析"><span class="nav-number">1.1.1.</span> <span class="nav-text">原理与分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何配置QCode"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">如何配置QCode</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特点分析"><span class="nav-number">1.1.2.</span> <span class="nav-text">特点分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论"><span class="nav-number">1.1.3.</span> <span class="nav-text">试验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DoReFa-Net"><span class="nav-number">1.2.</span> <span class="nav-text">DoReFa Net</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Towards-Effective-Low-bitwidth-Convolutional-Neural-Networks"><span class="nav-number">1.3.</span> <span class="nav-text">Towards Effective Low-bitwidth Convolutional Neural Networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WRPN"><span class="nav-number">1.4.</span> <span class="nav-text">WRPN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理分析"><span class="nav-number">1.4.1.</span> <span class="nav-text">原理分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特点分析-1"><span class="nav-number">1.4.2.</span> <span class="nav-text">特点分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论-1"><span class="nav-number">1.4.3.</span> <span class="nav-text">试验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VNQ-Variational-Network-Quantization"><span class="nav-number">1.5.</span> <span class="nav-text">VNQ: Variational Network Quantization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理分析-1"><span class="nav-number">1.5.1.</span> <span class="nav-text">原理分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特点分析-2"><span class="nav-number">1.5.2.</span> <span class="nav-text">特点分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WAGE-Training-and-Inference-with-Integers-in-Deep-Neural-Networks"><span class="nav-number">1.6.</span> <span class="nav-text">WAGE: Training and Inference with Integers in Deep Neural Networks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论-2"><span class="nav-number">1.6.1.</span> <span class="nav-text">试验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Clip-Q-Deep-network-compression-learning-by-In-Parallel-Pruning-Quantization"><span class="nav-number">1.7.</span> <span class="nav-text">Clip-Q: Deep network compression learning by In-Parallel Pruning Quantization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论-3"><span class="nav-number">1.7.1.</span> <span class="nav-text">试验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bi-Real-Net"><span class="nav-number">1.8.</span> <span class="nav-text">Bi-Real Net</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论-4"><span class="nav-number">1.8.1.</span> <span class="nav-text">试验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Efficient-Non-uniform-quantizer-for-quantized-neural-network-targeting-Re-configurable-hardware"><span class="nav-number">1.9.</span> <span class="nav-text">Efficient Non-uniform quantizer for quantized neural network targeting Re-configurable hardware</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ELQ-Explicit-Loss-Error-Aware-Quantization-for-Low-Bit-Deep-Neural-Networks"><span class="nav-number">1.10.</span> <span class="nav-text">ELQ: Explicit Loss-Error-Aware Quantization for Low-Bit Deep Neural Networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PACT-parameterized-clipping-activation-for-quantized-neural-networks"><span class="nav-number">1.11.</span> <span class="nav-text">PACT: parameterized clipping activation for quantized neural networks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理分析-2"><span class="nav-number">1.11.1.</span> <span class="nav-text">原理分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#试验与结论-5"><span class="nav-number">1.11.2.</span> <span class="nav-text">试验与结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HWGQ-Deep-Learning-with-Low-Precision-by-Half-wave-Gaussian-Quantization-CVPR2017"><span class="nav-number">1.12.</span> <span class="nav-text">HWGQ: Deep Learning with Low Precision by Half-wave Gaussian Quantization. CVPR2017</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FQN-Fully-Quantized-Network-for-Object-Detection-CVPR2019"><span class="nav-number">1.13.</span> <span class="nav-text">FQN: Fully Quantized Network for Object Detection. CVPR2019</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">2.</span> <span class="nav-text">References:</span></a></li></ol></div>
             
 
           </div>
@@ -629,11 +655,11 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">我是个mode感情的杀手</span>
+  <span class="author" itemprop="copyrightHolder">hustzxd</span>
 
   
 </div>
