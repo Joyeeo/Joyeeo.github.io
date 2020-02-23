@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="quantization,paper," />
+  <meta name="keywords" content="paper,quantization," />
 
 
 
@@ -80,7 +80,7 @@
 
 
 <meta name="description" content="Related papers Deep learning with limited numerical precision. 2015 IBM DoReFa-Net: Training low bit-width convolutional neural networks with low bit-width gradients. 2016 XNOR-Net: ImageNet Classific">
-<meta name="keywords" content="quantization,paper">
+<meta name="keywords" content="paper,quantization">
 <meta property="og:type" content="article">
 <meta property="og:title" content="paper-of-quantization">
 <meta property="og:url" content="http://joyeeo.github.io/2019/01/11/paper-of-quantization/index.html">
@@ -336,7 +336,8 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/2019/01/11/paper-of-quantization/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/11/paper-of-quantization/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/11/paper-of-quantization/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -433,9 +434,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/quantization/" rel="tag"># quantization</a>
-          
             <a href="/tags/paper/" rel="tag"># paper</a>
+          
+            <a href="/tags/quantization/" rel="tag"># quantization</a>
           
         </div>
       
@@ -491,7 +492,14 @@
 
   
     <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
     </div>
+
   
 
 
@@ -769,6 +777,26 @@
 
   
 
+    
+      <script id="dsq-count-scr" src="https://joyee.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://joyeeo.github.io/2019/01/11/paper-of-quantization/';
+          this.page.identifier = '2019/01/11/paper-of-quantization/';
+          this.page.title = 'paper-of-quantization';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://joyee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
 
 
 
@@ -784,38 +812,12 @@
 
 
 
-  
 
 
 
 
 
 
-
-
-
-
-  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
-  
-  <script type="text/javascript">
-    var GUEST = ['nick','mail','link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item=>{
-      return GUEST.indexOf(item)>-1;
-    });
-    new Valine({
-        el: '#comments' ,
-        verify: false,
-        notify: false,
-        appId: 'QQvNAVl7slo6LMGbn2erpoYI-gzGzoHsz',
-        appKey: 'bBSMYeODrthGcwen8URC0vO4',
-        placeholder: 'Just go go',
-        avatar:'mm',
-        guest_info:guest,
-        pageSize:'10' || 10,
-    });
-  </script>
 
 
 
