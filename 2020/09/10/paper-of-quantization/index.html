@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="2020 LSQ: Learned Step Size Quantization ICLR2020 Mixed Precision DNNs: All you need is a good parametrization ICLR2020 sony HAWQv2: Hessian Aware trace-Weighted Quantization of Neural Networks LLSQ:">
+<meta name="description" content="PTQvsTAQc1. Post-Training Quantization(PTQ) ZeroQ, EasyQuant, LAPQ, ACIQ,DFQ c2. Training-Aware Quantization(TAQ)  S&amp;amp;Q3. Binary, Ternary, 3-4-5-bit, Flexiblec1. Binary c2. Ternary c3. 3-4-5-bit c4">
 <meta name="keywords" content="quantization,paper">
 <meta property="og:type" content="article">
 <meta property="og:title" content="paper-of-quantization">
 <meta property="og:url" content="http://joyeeo.github.io/2020/09/10/paper-of-quantization/index.html">
 <meta property="og:site_name" content="Joey&#39;s note">
-<meta property="og:description" content="2020 LSQ: Learned Step Size Quantization ICLR2020 Mixed Precision DNNs: All you need is a good parametrization ICLR2020 sony HAWQv2: Hessian Aware trace-Weighted Quantization of Neural Networks LLSQ:">
+<meta property="og:description" content="PTQvsTAQc1. Post-Training Quantization(PTQ) ZeroQ, EasyQuant, LAPQ, ACIQ,DFQ c2. Training-Aware Quantization(TAQ)  S&amp;amp;Q3. Binary, Ternary, 3-4-5-bit, Flexiblec1. Binary c2. Ternary c3. 3-4-5-bit c4">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-09-10T11:58:20.086Z">
+<meta property="og:updated_time" content="2020-10-21T08:11:25.036Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="paper-of-quantization">
-<meta name="twitter:description" content="2020 LSQ: Learned Step Size Quantization ICLR2020 Mixed Precision DNNs: All you need is a good parametrization ICLR2020 sony HAWQv2: Hessian Aware trace-Weighted Quantization of Neural Networks LLSQ:">
+<meta name="twitter:description" content="PTQvsTAQc1. Post-Training Quantization(PTQ) ZeroQ, EasyQuant, LAPQ, ACIQ,DFQ c2. Training-Aware Quantization(TAQ)  S&amp;amp;Q3. Binary, Ternary, 3-4-5-bit, Flexiblec1. Binary c2. Ternary c3. 3-4-5-bit c4">
 
 
 
@@ -365,28 +365,49 @@
       
 
       
-        <h3 id="2020"><a href="#2020" class="headerlink" title="2020"></a>2020</h3><ol>
+        <h2 id="PTQvsTAQ"><a href="#PTQvsTAQ" class="headerlink" title="PTQvsTAQ"></a>PTQvsTAQ</h2><p>c1. Post-Training Quantization(PTQ)</p>
+<p><a href="#2020"><strong>ZeroQ</strong></a>, <a href="#2020"><strong>EasyQuant</strong></a>, <a href="#ICLR2020"><strong>LAPQ</strong></a>, <a href="#NIPS2019"><strong>ACIQ</strong></a>,<br><a href="#ICCV2019"><strong>DFQ</strong></a></p>
+<p>c2. Training-Aware Quantization(TAQ)</p>
+<hr>
+<h2 id="S-amp-Q"><a href="#S-amp-Q" class="headerlink" title="S&amp;Q"></a>S&amp;Q</h2><h2 id="3-Binary-Ternary-3-4-5-bit-Flexible"><a href="#3-Binary-Ternary-3-4-5-bit-Flexible" class="headerlink" title="3. Binary, Ternary, 3-4-5-bit, Flexible"></a>3. Binary, Ternary, 3-4-5-bit, Flexible</h2><p>c1. Binary</p>
+<p>c2. Ternary</p>
+<p>c3. 3-4-5-bit</p>
+<p>c4. Flexible</p>
+<hr>
+<h3 id="2020"><a href="#2020" class="headerlink" title="2020"></a>2020</h3><h4 id="ECCV2020"><a href="#ECCV2020" class="headerlink" title="ECCV2020"></a>ECCV2020</h4><ol>
+<li><strong>PWLQ</strong>: Post-Training Piecewise Linear Quantization for Deep Neural Networks. <strong>Samsung</strong></li>
+</ol>
+<h4 id="CVPR2020"><a href="#CVPR2020" class="headerlink" title="CVPR2020"></a>CVPR2020</h4><ol start="56">
+<li><strong>ZeroQ</strong>: A Novel Zero-Shot Quantization Framework. <strong>Berkeley, Peking University</strong></li>
+<li><strong>AdaBits</strong>: Neural Network Quantization with Adaptive Bit-Widths. <strong>ByteDance</strong> direct adaption, progressive training and joint training 三种方法来量化模型</li>
+<li><strong>BiDet</strong>: An Efficient Binarized Object Detector. <strong>CVPR2020</strong></li>
+<li><strong>APQ</strong>: Joint Search for Network Architecture, Pruning and Quantization Policy. <strong>CVPR2020 MIT</strong> architecture, channel pruning, HAQ三者结合的NAS方法，可操作性确实更好，motivation也合适。</li>
+<li><strong>IR-Net</strong>: Forward and Backward Information Retention for Accurate Binary Neural Networks. <strong>CVPR2020</strong></li>
+</ol>
+<h4 id="ICLR2020"><a href="#ICLR2020" class="headerlink" title="ICLR2020"></a>ICLR2020</h4><ol>
 <li><strong>LSQ</strong>: Learned Step Size Quantization <strong>ICLR2020</strong></li>
 <li>Mixed Precision DNNs: All you need is a good parametrization <strong>ICLR2020 sony</strong></li>
-<li><strong>HAWQv2</strong>: Hessian Aware trace-Weighted Quantization of Neural Networks</li>
+<li><strong>SAT</strong>: Rethinking neural network quantization. Scale-Adjusted Training <strong>ICLR2020 reject</strong> <a href="https://openreview.net/forum?id=HygQ7TNtPr" target="_blank" rel="noopener">paper</a> </li>
 <li><strong>LLSQ</strong>: Learned Symmetric Quantization of Neural Networks for Low-precision Integer Hardware. <strong>ICLR2020</strong> <strong>ICT</strong></li>
-<li><strong>ZeroQ</strong>: A Novel Zero-Shot Quantization Framework. <strong>Berkeley, Peking University</strong></li>
+</ol>
+<ol start="54">
+<li><strong>HAWQv2</strong>: Hessian Aware trace-Weighted Quantization of Neural Networks</li>
 <li><strong>SS-Auto</strong>: A Single-Shot, Automatic Structured Weight Pruning Framework of DNNs with Ultra-High Efficiency. <strong>IBM Watson Lab</strong></li>
-<li><strong>IR-Net</strong>: Forward and Backward Information Retention for Accurate Binary Neural Networks. <strong>CVPR2020</strong></li>
-<li><strong>BiDet</strong>: An Efficient Binarized Object Detector. <strong>CVPR2020</strong></li>
 <li><strong>BBG</strong>: Balanced Binary Neural Networks with Gated Residual.</li>
-<li><strong>APQ</strong>: Joint Search for Network Architecture, Pruning and Quantization Policy. <strong>CVPR2020 MIT</strong> architecture, channel pruning, HAQ三者结合的NAS方法，可操作性确实更好，motivation也合适。</li>
+<li><strong>EasyQuant</strong>: Post-training Quantization via Scale Optimization. 优化每层的输出的与余弦距离 <a href="https://github.com/deepglint/EasyQuant" target="_blank" rel="noopener">code</a>中给出了加速效果实验</li>
+<li><strong>LAPQ</strong>: Loss Aware Post-training Quantization <a href="https://github.com/ynahshan/nn-quantization-pytorch/blob/master/lapq/README.md" target="_blank" rel="noopener">code</a> <strong>intel AIPG</strong> ACIQ的进化版，方法更加简洁，实现更直接，效果也更加好</li>
 </ol>
-<h3 id="2019"><a href="#2019" class="headerlink" title="2019"></a>2019</h3><h4 id="ICLR"><a href="#ICLR" class="headerlink" title="ICLR"></a>ICLR</h4><ol>
-<li><strong>ACIQ</strong>: analytical clipping for integer quantization of neural networks. <strong>ICLR2019</strong> Intel</li>
+<h3 id="2019"><a href="#2019" class="headerlink" title="2019"></a>2019</h3><h4 id="ICLR2019"><a href="#ICLR2019" class="headerlink" title="ICLR2019"></a>ICLR2019</h4><ol>
+<li><strong>ACIQ(pre)</strong>: analytical clipping for integer quantization of neural networks. <strong>ICLR2019 reject</strong> <strong>intel AIPG</strong></li>
 <li>Per-Tensor Fixed-point quantization of the back-propagation algorithm. <strong>ICLR2019</strong></li>
-<li><strong>RQ</strong>: Relaxed Quantization for disretized NNs. <strong>ICLR2019</strong></li>
+<li><strong>RQ</strong>: Relaxed Quantization for discretized NNs. <strong>ICLR2019</strong></li>
 </ol>
-<h4 id="NIPS"><a href="#NIPS" class="headerlink" title="NIPS"></a>NIPS</h4><ol>
-<li><strong>Post training</strong> 4-bit quantization of convolution networks for rapid-deployment. <strong>NIPS 2019</strong> AIPG, Intel</li>
+<h4 id="NIPS2019"><a href="#NIPS2019" class="headerlink" title="NIPS2019"></a>NIPS2019</h4><ol>
+<li><strong>ACIQ</strong> Post training 4-bit quantization of convolution networks for rapid-deployment. <strong>NIPS 2019</strong> <strong>AIPG, Intel</strong></li>
 </ol>
-<h4 id="ICCV"><a href="#ICCV" class="headerlink" title="ICCV"></a>ICCV</h4><ol>
+<h4 id="ICCV2019"><a href="#ICCV2019" class="headerlink" title="ICCV2019"></a>ICCV2019</h4><ol>
 <li><strong>DSQ</strong>: Differentiable Soft Quantization: Bridging Full-Precision and Low-Bit Neural Networks. <strong>ICCV2019</strong> SenseTime, Beihang</li>
+<li><strong>DFQ</strong>: Data-Free Quantization through Weight Equalization and Bias Correction. Qualcomm 高通</li>
 </ol>
 <h4 id="CVPR"><a href="#CVPR" class="headerlink" title="CVPR"></a>CVPR</h4><ol>
 <li><strong>FQN</strong>: Fully Quantized Network for Object Detection. <strong>CVPR2019</strong></li>
@@ -396,9 +417,10 @@
 <li><strong>SAWB</strong>: Accurate and efficient 2-bit quantized neural networks. <strong>sysml2019</strong></li>
 <li><strong>SQuantizer</strong>: Simultaneous Learning for Both Sparse and Low-precision Neural Networks. <strong>2019</strong> AIPG, Intel</li>
 <li>Distributed Low Precision Training Without Mixed Precision. <strong>Oxford snowcloud.ai</strong></li>
-<li><strong>Adaptive</strong> Precision Training: Quantify Back Propagation in Neural Networks with Fixed-point Numbers. <strong>ICT Cambricon</strong> int8 for weights and activations, int16 for most of the gradients.</li>
-<li><strong>AdaBits</strong>: Neural Network Quantization with Adaptive Bit-Widths. <strong>ByteDance</strong> 想法和上篇论文很像</li>
-<li><strong>WAGEUBN</strong>: Training High-Performance and Large-Scale Deep Neural Networks with Full 8-bit Integers. 应该算是WAGE的进阶版了</li>
+<li><p><strong>Adaptive</strong> Precision Training: Quantify Back Propagation in Neural Networks with Fixed-point Numbers. <strong>ICT Cambricon</strong> int8 for weights and activations, int16 for most of the gradients. 通过量化加快训练过程</p>
+</li>
+<li><p><strong>WAGEUBN</strong>: Training High-Performance and Large-Scale Deep Neural Networks with Full 8-bit Integers. 应该算是WAGE的进阶版了</p>
+</li>
 </ol>
 <h3 id="2018"><a href="#2018" class="headerlink" title="2018"></a>2018</h3><h4 id="ICLR2018"><a href="#ICLR2018" class="headerlink" title="ICLR2018"></a>ICLR2018</h4><ol>
 <li><strong>VNQ</strong>: Variational network quantization. <strong>ICLR2018</strong></li>
@@ -409,7 +431,7 @@
 <li>Quantized back-propagation: training binarized neural networks with quantized gradients. <strong>ICLR2018</strong></li>
 </ol>
 <h4 id="CVPR2018"><a href="#CVPR2018" class="headerlink" title="CVPR2018"></a>CVPR2018</h4><ol>
-<li><strong>Clip-Q</strong>: Deep network compression learning by In-Parallel Pruning Quantization. <strong>CVPR2018</strong> SFU</li>
+<li><strong>Clip-Q</strong>: Deep network compression learning by In-Parallel Pruning Quantization. <strong>CVPR2018</strong> <strong>SFU</strong> quantization 与pruning同时进行，达到更优的压缩结果。先使用贝叶斯优化搜索 layer-wise的（p,q),然后在进行fine-turning，达到最大目的的压缩权重，没有涉及到激活值的量化和压缩</li>
 <li><strong>ELQ</strong>: Explicit loss-error-aware quantization for low-bit deep neural networks. <strong>CVPR2018</strong> intel tsinghua</li>
 <li>Quantization and training of neural networks for efficient integer-arithmetic-only inference. <strong>CVPR2018</strong> Google</li>
 <li><strong>TSQ</strong>: two-step quantization for low-bit neural networks. <strong>CVPR2018</strong></li>
@@ -463,6 +485,8 @@
 <li>Training a binary weight object detector by knowledge transfer for autonomous driving. <strong>2018</strong></li>
 <li>Low-bit Quantization of Neural Networks for Efﬁcient Inference. <strong>2019</strong> huawei</li>
 </ol>
+<hr>
+<p><a href="#2020">top</a></p>
 
       
     </div>
@@ -504,6 +528,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/10/10/paper-of-pruning/" rel="prev" title="paper of pruning">
+                paper of pruning <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -594,7 +622,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -656,7 +684,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#2020"><span class="nav-number">1.</span> <span class="nav-text">2020</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2019"><span class="nav-number">2.</span> <span class="nav-text">2019</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ICLR"><span class="nav-number">2.1.</span> <span class="nav-text">ICLR</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NIPS"><span class="nav-number">2.2.</span> <span class="nav-text">NIPS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ICCV"><span class="nav-number">2.3.</span> <span class="nav-text">ICCV</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CVPR"><span class="nav-number">2.4.</span> <span class="nav-text">CVPR</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Other"><span class="nav-number">2.5.</span> <span class="nav-text">Other</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2018"><span class="nav-number">3.</span> <span class="nav-text">2018</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ICLR2018"><span class="nav-number">3.1.</span> <span class="nav-text">ICLR2018</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CVPR2018"><span class="nav-number">3.2.</span> <span class="nav-text">CVPR2018</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ECCV2018"><span class="nav-number">3.3.</span> <span class="nav-text">ECCV2018</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NIPS2018"><span class="nav-number">3.4.</span> <span class="nav-text">NIPS2018</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AAAI2018"><span class="nav-number">3.5.</span> <span class="nav-text">AAAI2018</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Other-1"><span class="nav-number">3.6.</span> <span class="nav-text">Other</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2015-2016"><span class="nav-number">4.</span> <span class="nav-text">2015-2016</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2017"><span class="nav-number">5.</span> <span class="nav-text">2017</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Other-2"><span class="nav-number"></span> <span class="nav-text">Other</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PTQvsTAQ"><span class="nav-number">1.</span> <span class="nav-text">PTQvsTAQ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#S-amp-Q"><span class="nav-number">2.</span> <span class="nav-text">S&amp;Q</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Binary-Ternary-3-4-5-bit-Flexible"><span class="nav-number">3.</span> <span class="nav-text">3. Binary, Ternary, 3-4-5-bit, Flexible</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2020"><span class="nav-number">3.1.</span> <span class="nav-text">2020</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ECCV2020"><span class="nav-number">3.1.1.</span> <span class="nav-text">ECCV2020</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CVPR2020"><span class="nav-number">3.1.2.</span> <span class="nav-text">CVPR2020</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ICLR2020"><span class="nav-number">3.1.3.</span> <span class="nav-text">ICLR2020</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2019"><span class="nav-number">3.2.</span> <span class="nav-text">2019</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ICLR2019"><span class="nav-number">3.2.1.</span> <span class="nav-text">ICLR2019</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NIPS2019"><span class="nav-number">3.2.2.</span> <span class="nav-text">NIPS2019</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ICCV2019"><span class="nav-number">3.2.3.</span> <span class="nav-text">ICCV2019</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CVPR"><span class="nav-number">3.2.4.</span> <span class="nav-text">CVPR</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Other"><span class="nav-number">3.2.5.</span> <span class="nav-text">Other</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2018"><span class="nav-number">3.3.</span> <span class="nav-text">2018</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ICLR2018"><span class="nav-number">3.3.1.</span> <span class="nav-text">ICLR2018</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CVPR2018"><span class="nav-number">3.3.2.</span> <span class="nav-text">CVPR2018</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ECCV2018"><span class="nav-number">3.3.3.</span> <span class="nav-text">ECCV2018</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NIPS2018"><span class="nav-number">3.3.4.</span> <span class="nav-text">NIPS2018</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AAAI2018"><span class="nav-number">3.3.5.</span> <span class="nav-text">AAAI2018</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Other-1"><span class="nav-number">3.3.6.</span> <span class="nav-text">Other</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2015-2016"><span class="nav-number">3.4.</span> <span class="nav-text">2015-2016</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2017"><span class="nav-number">3.5.</span> <span class="nav-text">2017</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Other-2"><span class="nav-number">4.</span> <span class="nav-text">Other</span></a></li></ol></div>
             
 
           </div>
@@ -676,7 +704,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

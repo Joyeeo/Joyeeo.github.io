@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="paper,compression, pruning, sparsity," />
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="卡西法，我们做个交换吧">
-<meta name="keywords" content="AI DL NLP">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Joey&#39;s note">
-<meta property="og:url" content="http://joyeeo.github.io/tags/sublime/index.html">
+<meta name="description" content="ADMM ADMM-Pruning A Systematic DNN Weight Pruning Framework using Alternating Direction Method of Multipliers. 2018 Yanzi Wang 使用ADMM来进行pruning，效果很好。 SS-Auto: A Single-Shot, Automatic Structured Weig">
+<meta name="keywords" content="paper,compression, pruning, sparsity">
+<meta property="og:type" content="article">
+<meta property="og:title" content="paper of pruning">
+<meta property="og:url" content="http://joyeeo.github.io/2020/10/10/paper-of-pruning/index.html">
 <meta property="og:site_name" content="Joey&#39;s note">
-<meta property="og:description" content="卡西法，我们做个交换吧">
+<meta property="og:description" content="ADMM ADMM-Pruning A Systematic DNN Weight Pruning Framework using Alternating Direction Method of Multipliers. 2018 Yanzi Wang 使用ADMM来进行pruning，效果很好。 SS-Auto: A Single-Shot, Automatic Structured Weig">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-10-10T09:23:21.006Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Joey&#39;s note">
-<meta name="twitter:description" content="卡西法，我们做个交换吧">
+<meta name="twitter:title" content="paper of pruning">
+<meta name="twitter:description" content="ADMM ADMM-Pruning A Systematic DNN Weight Pruning Framework using Alternating Direction Method of Multipliers. 2018 Yanzi Wang 使用ADMM来进行pruning，效果很好。 SS-Auto: A Single-Shot, Automatic Structured Weig">
 
 
 
@@ -119,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://joyeeo.github.io/tags/sublime/"/>
+  <link rel="canonical" href="http://joyeeo.github.io/2020/10/10/paper-of-pruning/"/>
 
 
 
 
 
-  <title>Tag: sublime | Joey's note</title>
+  <title>paper of pruning | Joey's note</title>
   
 
 
@@ -144,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -272,54 +273,174 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>sublime<small>Tag</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joyeeo.github.io/2020/10/10/paper-of-pruning/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="hustzxd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/IMG_1242.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey's note">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/08/09/ssh-tunnel-端口转发/" itemprop="url">
-              
-                <span itemprop="name">ssh tunnel 端口转发</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">paper of pruning</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-08-09T10:14:55+08:00"
-              content="2018-08-09" >
-          08-09
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-10T17:23:20+08:00">
+                2020-10-10
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/10/10/paper-of-pruning/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/10/10/paper-of-pruning/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h3 id="ADMM"><a href="#ADMM" class="headerlink" title="ADMM"></a>ADMM</h3><ol>
+<li><strong>ADMM-Pruning</strong> A Systematic DNN Weight Pruning Framework using Alternating Direction Method of Multipliers. <strong>2018 Yanzi Wang</strong> 使用ADMM来进行pruning，效果很好。</li>
+<li><strong>SS-Auto</strong>: A Single-Shot, Automatic Structured Weight Pruning Framework of DNNs with Ultra-High Efficiency. <strong>2020</strong></li>
+<li><strong>ADMM-NN</strong>: An Algorithm-Hardware Co-Design Framework of DNNs Using Alternating Direction Method of Multipliers</li>
+</ol>
+<hr>
+<ol>
+<li><strong>LookAhead</strong>: a far-sighted alternative of magnitude-based pruning. <a href="https://github.com/alinlab/lookahead_pruning" target="_blank" rel="noopener">PyToch</a> <strong>ICLR2020</strong></li>
+<li>Weight pruning via adaptive sparsity loss. $L(\{W_i\}, \{b_i\}) + \gamma L_s(\{b_i\})$， 前半部分，来让权重更新，并尽量让稀疏度降低；后半部分，尽量让稀疏度提高；通过两者的组合，来形成一个自适应的调节稀疏度的过程。<a href="https://github.com/georgeretsi/SparsityLoss" target="_blank" rel="noopener">PyTorch</a></li>
+</ol>
+<hr>
+<h3 id="Other"><a href="#Other" class="headerlink" title="Other"></a>Other</h3><ol>
+<li><strong>DeepTwist</strong> : learning model compression via occasional weight distortion. <strong>ICLR 2019 reject</strong>现在看起来还有点迷惑。与pruning, quantization, svd结合，优化compression的。只需要增加一个超参数，weight distortion 就是 weight-noise-injection</li>
+</ol>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/paper/" rel="tag"># paper</a>
+          
+            <a href="/tags/compression-pruning-sparsity/" rel="tag"># compression, pruning, sparsity</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/10/paper-of-quantization/" rel="next" title="paper-of-quantization">
+                <i class="fa fa-chevron-left"></i> paper-of-quantization
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -327,6 +448,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -347,8 +482,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -419,6 +563,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ADMM"><span class="nav-number">1.</span> <span class="nav-text">ADMM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Other"><span class="nav-number">2.</span> <span class="nav-text">Other</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -559,6 +719,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -576,6 +740,18 @@
       <script id="dsq-count-scr" src="https://joyee.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://joyeeo.github.io/2020/10/10/paper-of-pruning/';
+          this.page.identifier = '2020/10/10/paper-of-pruning/';
+          this.page.title = 'paper of pruning';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://joyee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
