@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Quantization,Training,Hardware/software co-design," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文提出一种软硬结合的训练解决方案（ETA），通过使用低位宽表示和计算，来加速神经网络的训练过程  主要问题 低位宽的表示虽然可以加速运算的过程，但是低位宽训练会导致正确率的下降，后者低位宽的训练通常需要精细的各种trick，是的训练算法很难通用。 BN层在硬件上很难处理。首先BN在训练过程中是不能与前一层相接的CONV算法融合的（但是在inference时一般是可以的），BN层在训练过程中可以">
+<meta name="keywords" content="Quantization,Training,Hardware&#x2F;software co-design">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(ETA) An Efficient Training Accelerator for DNNs Based on Hardware-Algorithm Co-Optimization">
+<meta property="og:url" content="http://joyeeo.github.io/2022/02/23/p-ETA/index.html">
+<meta property="og:site_name" content="Joey&#39;s note">
+<meta property="og:description" content="本文提出一种软硬结合的训练解决方案（ETA），通过使用低位宽表示和计算，来加速神经网络的训练过程  主要问题 低位宽的表示虽然可以加速运算的过程，但是低位宽训练会导致正确率的下降，后者低位宽的训练通常需要精细的各种trick，是的训练算法很难通用。 BN层在硬件上很难处理。首先BN在训练过程中是不能与前一层相接的CONV算法融合的（但是在inference时一般是可以的），BN层在训练过程中可以">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://joyeeo.github.io/2022/02/23/p-ETA/training_process.jpg">
+<meta property="og:image" content="http://joyeeo.github.io/2022/02/23/p-ETA/PINT.jpg">
+<meta property="og:image" content="http://joyeeo.github.io/2022/02/23/p-ETA/PINT_curve.png">
+<meta property="og:image" content="http://joyeeo.github.io/2022/02/23/p-ETA/pint_alg.jpg">
+<meta property="og:image" content="http://joyeeo.github.io/2022/02/23/p-ETA/pint_l2.jpg">
+<meta property="og:image" content="http://joyeeo.github.io/2022/02/23/p-ETA/pint_l1.jpg">
+<meta property="og:image" content="http://joyeeo.github.io/2022/02/23/p-ETA/pint_mac.jpg">
+<meta property="og:updated_time" content="2022-02-23T13:14:43.161Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="(ETA) An Efficient Training Accelerator for DNNs Based on Hardware-Algorithm Co-Optimization">
+<meta name="twitter:description" content="本文提出一种软硬结合的训练解决方案（ETA），通过使用低位宽表示和计算，来加速神经网络的训练过程  主要问题 低位宽的表示虽然可以加速运算的过程，但是低位宽训练会导致正确率的下降，后者低位宽的训练通常需要精细的各种trick，是的训练算法很难通用。 BN层在硬件上很难处理。首先BN在训练过程中是不能与前一层相接的CONV算法融合的（但是在inference时一般是可以的），BN层在训练过程中可以">
+<meta name="twitter:image" content="http://joyeeo.github.io/2022/02/23/p-ETA/training_process.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://joyeeo.github.io/2022/02/23/p-ETA/"/>
+
+
+
+
+
+  <title>(ETA) An Efficient Training Accelerator for DNNs Based on Hardware-Algorithm Co-Optimization | Joey's note</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Joey's note</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">不是每个人都能航行于海洋，但我们仍可以分享梦想</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joyeeo.github.io/2022/02/23/p-ETA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="hustzxd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/IMG_1242.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey's note">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">(ETA) An Efficient Training Accelerator for DNNs Based on Hardware-Algorithm Co-Optimization</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-02-23T21:14:43+08:00">
+                2022-02-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2022/02/23/p-ETA/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2022/02/23/p-ETA/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文提出一种软硬结合的训练解决方案（ETA），通过使用低位宽表示和计算，来加速神经网络的训练过程</p>
+</blockquote>
+<h1 id="主要问题"><a href="#主要问题" class="headerlink" title="主要问题"></a>主要问题</h1><ol>
+<li>低位宽的表示虽然可以加速运算的过程，但是低位宽训练会导致正确率的下降，后者低位宽的训练通常需要精细的各种trick，是的训练算法很难通用。</li>
+<li>BN层在硬件上很难处理。首先BN在训练过程中是不能与前一层相接的CONV算法融合的（但是在inference时一般是可以的），BN层在训练过程中可以加速收敛。为了保证BN的效果，一般需要加大的batch size，其次，BN层中的某些运算，比如square,sqrt,division等是非常硬件不友好的，容易增加训练的不稳定性。所以之前很多工作都保持BN的运算为高位宽的浮点运算。</li>
+<li>对于卷积层来说，并不一定映射为卷积运算，比如在之前的工作中，就有把stride为2的卷积层当作池化操作来实现，从而能提升运算的效率。</li>
+</ol>
+<h1 id="本文的主要贡献"><a href="#本文的主要贡献" class="headerlink" title="本文的主要贡献"></a>本文的主要贡献</h1><ol>
+<li>提出了8bit表示类型piecewise integer (PINT)，并设计了专用的运算单元；此外，文中设计了一种normlize层 L1-norm filter response normalization（L1-FRN），来替换之前的BN层，从而去掉了L2-norm相关的运算。算子替换后，accuracy与浮点训练结果相当。</li>
+<li>可重构的PE阵列的设计，可支持多种计算模式。比如主要问题中提到的stride为2的CONV</li>
+<li>设计了辅助core用于处理特殊运算，比如L1-FRN,threshold linear unit(TLU), WU（权重更新）</li>
+<li>工作采用了Xilinx VC709平台实现，吞吐量是811.25 GOPS；能效是93.86 GOPS/W</li>
+</ol>
+<h1 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h1><h2 id="神经网络训练"><a href="#神经网络训练" class="headerlink" title="神经网络训练"></a>神经网络训练</h2><blockquote>
+<p>训练过程可以拆解为4个步骤，FP, BP, WG, and WU.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>FP</th>
+<th>BP</th>
+<th>WG</th>
+<th>WU</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forward Propagation</td>
+<td>Backward Propagation</td>
+<td>Weight Gradient</td>
+<td>Weight Updating</td>
+</tr>
+<tr>
+<td>逐层计算输出</td>
+<td>逐层计算Error</td>
+<td>逐层计算gradients</td>
+<td>根据优化策略和梯度更新权重</td>
+</tr>
+</tbody>
+</table>
+<p><img src="training_process.jpg" width="100%" height="100%"></p>
+<h2 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h2><ol>
+<li><strong>算法部分</strong> 这部分主要介绍了量化工作，比如DoReFa；低位宽训练工作，比如FP16或者自定义格式类型(BFLOAT16)，当然也有使用INT8来进行训练的设计，但是对于BN层来说，仍然保留了高精度浮点的运算。</li>
+<li><strong>硬件设计</strong> 硬件平台有FPGA和ASCI。支持固定连接的稀疏训练加速器设计；FPGA集群的设计用来支持训练等.</li>
+</ol>
+<h1 id="Hardware-friendly-Training-Algorithm"><a href="#Hardware-friendly-Training-Algorithm" class="headerlink" title="Hardware-friendly Training Algorithm"></a>Hardware-friendly Training Algorithm</h1><blockquote>
+<p>硬件有好的训练方法，主要介绍PINT类型的定义，如何运算，其次还包括量化友好的normlized layer 的设计</p>
+</blockquote>
+<h2 id="Piecewise-integer"><a href="#Piecewise-integer" class="headerlink" title="Piecewise integer"></a>Piecewise integer</h2><h3 id="classical-quantization-representation"><a href="#classical-quantization-representation" class="headerlink" title="classical quantization representation"></a>classical quantization representation</h3><p>量化一个tensor $\mathbf{x}$ 到integer的过程如下所示：<br>\begin{equation}<br>\begin{split}<br>    s &amp;= \frac{\max(|\mathbf{x}|)}{2^{k-1}} \\<br>    \mathbf{q} &amp;= \mbox{clamp}(\mbox{round}(\frac{\mathbf{x}}{s}), -2^{k-1}, 2^{k-1}-1) \\<br>    \mathbf{\hat{x}} &amp;= \mathbf{q} \times s<br>\end{split}<br>\end{equation}<br>其中，缩放系数$s$的取值可以根据数据的最大值来取，但是数据中不可避免有一些outlier，因此会引入一些不稳定因素(这个原因只要有缩放系数的存在就会有影响，但是目前量化方法均有缩放系数，有一些量化方法仅量化前向传播计算，设置缩放系数为科学习的，一定程度上缓解了这个问题，也能达到更好的结果，参考LSQ。)</p>
+<p>抛开缩放系数的配置问题，当选择了合适的缩放系数以后，对数值进行INT表示时，一方面分辨率只能是1，所以会产生一些信息损失，另一个方面，也是更要重要的地方，就是由于INT表示的范围有限，一些数值会被截断掉（如果缩放系数是根据最大值来确定的，那么第二个原因造成的损失就基本没有，第一个原因则是主要的）</p>
+<h3 id="PINT-表示方法"><a href="#PINT-表示方法" class="headerlink" title="PINT 表示方法"></a>PINT 表示方法</h3><p>PINT将$k$bit使用$d$划分为两个部分，可以记作：$(k, d)$</p>
+<p>具体的数值换算如下：<br>\begin{equation}<br>    x =<br>\begin{cases}<br>    \text{Low bits signed integer} ,     &amp; \text{flag}=0 \&amp; \odot(HB)=1\\<br>    \text{Signed integer} \cdot 2^d,     &amp; \text{flag} = 1 \\<br>    \text{Signed integer} \cdot 2^{k-2}, &amp; \text{otherwise}<br>\end{cases}<br>\end{equation}<br><img src="PINT.jpg" width="80%" height="80%"><br>结合图中标记，可以这样理解，<br>Signed integer 是INT$(k-1)$类型，其取值范围是$[-2^{k-2}, 2^{k-2}-1]$</p>
+<ul>
+<li>flag=1时，使用额外的缩放系数$2^d$，用于表示中等大小的数值；</li>
+<li>当flag=0时，这时候又划分为两种情况，<ul>
+<li>第一种情况，$\odot(HB)=1$，即HB所有的bit均为1或者0，那么HB便不对最终的数值大小产生作用，只有sign+LB有意义，由于LB多扩展了一位，扩展的一位肯定也与符号位相同，所以仅看LB就可以了， 缩放系数直接为1；</li>
+<li>第二种情况，HB中有效位，缩放系数使用了 $2^{k-2}$ ，用来表示较大的数值</li>
+</ul>
+</li>
+</ul>
+<p>可以根据图中描述，画出PINT(8,3)可以表示的256个数值<br><img src="PINT_curve.png" width="100%" height="100%"><br>橘黄色的线表示分辨率的相对大小，可以发现由于三种情况，对应的缩放系数也有三种；蓝色的线是256个数值的具体大小，可以发现，在大数部分，表示的较为稀疏，在接近0的部分，表示的较为密集，分辨率仅为1，在两者之间，分辨率也是一种权衡。<br>总结一下，这个表示的总体思想是，对于绝对值较大的数值，分辨率配置较为稀疏，对于绝对值越小的数，分辨率越稠密，一共设置了三种分辨率，所以更好的满足神经网络中的钟形分布的数据表示。</p>
+<p>PINT(k, d)的表示范围在 $[−2^{2(k−2)}, 2^{2(k−2)−1}]$, 分辨率有三个等级，分别是$2^{k-2}, 2^d, 1$，更具体的当k=8, d=3时，表示范围是$[−4096, 4098]$，分辨率分别为：$64, 8, 1$</p>
+<h4 id="PINT-量化过程"><a href="#PINT-量化过程" class="headerlink" title="PINT 量化过程"></a>PINT 量化过程</h4><p>参考上图，主要划分为3段，每段的缩放系数不同，采用了随机round方式，量化的过程具体如下。需要注意的是，最原始的缩放系数仍然由待量化数据的最大值来决定，但outlier对量化产生的影响将被缩小，因为PINT的表示范围十分大，且对于outiler一般为绝对值非常大的值，有一定的包容能力，对钟形分布的绝大部分中间数值的表示带来较小的影响。<br><img src="pint_alg.jpg" width="50%" height="50%"></p>
+<h2 id="L1-norm-层的设计"><a href="#L1-norm-层的设计" class="headerlink" title="L1-norm 层的设计"></a>L1-norm 层的设计</h2><p>BN层的运算过于复杂且对于batch size有较高的要求，bs不能过小，之前已有工作使用L2-norm来替换BN的作用，能灵活支持不同尺度的bs；本文中将L2精简为L1<br><img src="pint_l2.jpg" width="30%" height="30%"><br><img src="pint_l1.jpg" width="30%" height="30%"><br>另外，由于没有减均值的操作，所以增加了一个偏置来模拟之前的功能，因此引入了TLU函数，它的定义如下<br>$$<br>    \mathbf{z} = max(\mathbf{y}, \tau)<br>$$<br>其中，$\tau$是可学习参数.</p>
+<h2 id="硬件设计"><a href="#硬件设计" class="headerlink" title="硬件设计"></a>硬件设计</h2><p>首先需要明确的是PINT需要一个专用的乘法器来进行运算，设计如下图<br><img src="pint_mac.jpg" width="50%" height="50%"><br>图中以PINT(8, 3)举例，包含：</p>
+<ul>
+<li>一个7bit的乘法器</li>
+<li>一个左移位器</li>
+<li>两个检测器，用于检查HB是否为全0或全1</li>
+<li>一个编码器。<br>右图的设计是吧INT32 转化为 PINT(8, 3), 具体过程可以参考原文。</li>
+</ul>
+<h1 id="ETA架构的设计"><a href="#ETA架构的设计" class="headerlink" title="ETA架构的设计"></a>ETA架构的设计</h1><p>暂略</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Quantization/" rel="tag"># Quantization</a>
+          
+            <a href="/tags/Training/" rel="tag"># Training</a>
+          
+            <a href="/tags/Hardware-software-co-design/" rel="tag"># Hardware/software co-design</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/10/10/paper-of-pruning/" rel="next" title="paper of pruning">
+                <i class="fa fa-chevron-left"></i> paper of pruning
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/IMG_1242.JPG"
+                alt="hustzxd" />
+            
+              <p class="site-author-name" itemprop="name">hustzxd</p>
+              <p class="site-description motion-element" itemprop="description">卡西法，我们做个交换吧</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/hustzxd" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:zhaoxiandong27@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#主要问题"><span class="nav-number">1.</span> <span class="nav-text">主要问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#本文的主要贡献"><span class="nav-number">2.</span> <span class="nav-text">本文的主要贡献</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#背景介绍"><span class="nav-number">3.</span> <span class="nav-text">背景介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#神经网络训练"><span class="nav-number">3.1.</span> <span class="nav-text">神经网络训练</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关工作"><span class="nav-number">3.2.</span> <span class="nav-text">相关工作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hardware-friendly-Training-Algorithm"><span class="nav-number">4.</span> <span class="nav-text">Hardware-friendly Training Algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Piecewise-integer"><span class="nav-number">4.1.</span> <span class="nav-text">Piecewise integer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#classical-quantization-representation"><span class="nav-number">4.1.1.</span> <span class="nav-text">classical quantization representation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PINT-表示方法"><span class="nav-number">4.1.2.</span> <span class="nav-text">PINT 表示方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#PINT-量化过程"><span class="nav-number">4.1.2.1.</span> <span class="nav-text">PINT 量化过程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#L1-norm-层的设计"><span class="nav-number">4.2.</span> <span class="nav-text">L1-norm 层的设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#硬件设计"><span class="nav-number">4.3.</span> <span class="nav-text">硬件设计</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ETA架构的设计"><span class="nav-number">5.</span> <span class="nav-text">ETA架构的设计</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hustzxd</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://joyee.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://joyeeo.github.io/2022/02/23/p-ETA/';
+          this.page.identifier = '2022/02/23/p-ETA/';
+          this.page.title = '(ETA) An Efficient Training Accelerator for DNNs Based on Hardware-Algorithm Co-Optimization';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://joyee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
