@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="docker," />
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="卡西法，我们做个交换吧">
-<meta name="keywords" content="AI DL NLP">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Joey&#39;s note">
-<meta property="og:url" content="http://joyeeo.github.io/tags/MXNet/index.html">
+<meta name="description" content="安装安装nvidia-docker 后，可以支持cudahttps://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker DockerfileDockerfile123456789101112FROM ubuntuMAINTAINER zxdRUN apt-get updateRU">
+<meta name="keywords" content="docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker">
+<meta property="og:url" content="http://joyeeo.github.io/2022/03/09/docker/index.html">
 <meta property="og:site_name" content="Joey&#39;s note">
-<meta property="og:description" content="卡西法，我们做个交换吧">
+<meta property="og:description" content="安装安装nvidia-docker 后，可以支持cudahttps://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker DockerfileDockerfile123456789101112FROM ubuntuMAINTAINER zxdRUN apt-get updateRU">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2022-03-09T13:23:04.469Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Joey&#39;s note">
-<meta name="twitter:description" content="卡西法，我们做个交换吧">
+<meta name="twitter:title" content="docker">
+<meta name="twitter:description" content="安装安装nvidia-docker 后，可以支持cudahttps://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker DockerfileDockerfile123456789101112FROM ubuntuMAINTAINER zxdRUN apt-get updateRU">
 
 
 
@@ -119,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://joyeeo.github.io/tags/MXNet/"/>
+  <link rel="canonical" href="http://joyeeo.github.io/2022/03/09/docker/"/>
 
 
 
 
 
-  <title>Tag: MXNet | Joey's note</title>
+  <title>docker | Joey's note</title>
   
 
 
@@ -144,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -272,54 +273,194 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>MXNet<small>Tag</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://joyeeo.github.io/2022/03/09/docker/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="hustzxd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/IMG_1242.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Joey's note">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/01/08/mxnet-build-from-source/" itemprop="url">
-              
-                <span itemprop="name">mxnet-build-from-source</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">docker</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-01-08T18:01:38+08:00"
-              content="2019-01-08" >
-          01-08
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-03-09T21:23:04+08:00">
+                2022-03-09
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2022/03/09/docker/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2022/03/09/docker/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>安装nvidia-docker 后，可以支持cuda<br><a href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker" target="_blank" rel="noopener">https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker</a></p>
+<h1 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h1><p>Dockerfile<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">FROM ubuntu</span><br><span class="line">MAINTAINER zxd</span><br><span class="line">RUN apt-get update</span><br><span class="line">RUN apt-get install vim -y</span><br><span class="line">RUN apt-get install screen -y</span><br><span class="line">RUN apt-get install htop -y </span><br><span class="line">RUN apt-get install zsh -y</span><br><span class="line">RUN apt-get install openssh-server -y</span><br><span class="line">RUN apt-get install curl -y</span><br><span class="line">RUN apt-get install git -y</span><br><span class="line">WORKDIR /workspace</span><br><span class="line"><span class="comment"># COPY requirements.txt requirements.txt</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="build-from-Dockerfile"><a href="#build-from-Dockerfile" class="headerlink" title="build from Dockerfile"></a>build from Dockerfile</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># build</span></span><br><span class="line">docker build -t ubuntu-test . </span><br><span class="line"><span class="comment"># run</span></span><br><span class="line">docker images</span><br><span class="line"><span class="comment"># -v 挂载host目录到container里，这样就可以使用vs code打开host文件进行修改，会自动同步到container里面</span></span><br><span class="line">docker run -itd -p 2729:22 -v &lt;host_dir&gt;:&lt;container_dir&gt; --gpus all --name &#123;cus_name&#125; &#123;IMAGE ID&#125;</span><br><span class="line"><span class="comment"># first time</span></span><br><span class="line">docker ps</span><br><span class="line">docker <span class="built_in">exec</span> -it &#123;CONTAINER ID&#125; /bin/bash</span><br><span class="line">sh -c <span class="string">"<span class="variable">$(curl -fsSL https://gitee.com/shmhlsy/oh-my-zsh-install.sh/raw/master/install.sh)</span>"</span></span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>param</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>–gpus all</td>
+<td>使用所有的GPU</td>
+</tr>
+<tr>
+<td>-it</td>
+<td>allocate a tty for the container process</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>不进入容器中</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>磁盘挂载</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>端口映射</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://docs.docker.com/engine/reference/run/" target="_blank" rel="noopener">https://docs.docker.com/engine/reference/run/</a><br><a href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/user-guide.html" target="_blank" rel="noopener">https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/user-guide.html</a></p>
+<h1 id="ssh-登陆"><a href="#ssh-登陆" class="headerlink" title="ssh 登陆"></a>ssh 登陆</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br><span class="line"></span><br><span class="line"><span class="comment">#PermitRootLogin prohibit-password</span></span><br><span class="line">PermitRootLogin yes</span><br><span class="line"></span><br><span class="line">service ssh restart <span class="comment"># open ssh</span></span><br><span class="line">ssh -p 2729 root@0.0.0.0</span><br></pre></td></tr></table></figure>
+<h1 id="删除所有退出的container"><a href="#删除所有退出的container" class="headerlink" title="删除所有退出的container"></a>删除所有退出的container</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm $(docker ps --filter status=exited -q)</span><br></pre></td></tr></table></figure>
+<p><a href="https://blog.csdn.net/TracelessLe/article/details/119060513" target="_blank" rel="noopener">https://blog.csdn.net/TracelessLe/article/details/119060513</a></p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/docker/" rel="tag"># docker</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/02/23/p-ETA/" rel="next" title="(ETA) An Efficient Training Accelerator for DNNs Based on Hardware-Algorithm Co-Optimization">
+                <i class="fa fa-chevron-left"></i> (ETA) An Efficient Training Accelerator for DNNs Based on Hardware-Algorithm Co-Optimization
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -327,6 +468,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -347,8 +502,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -419,6 +583,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dockerfile"><span class="nav-number">2.</span> <span class="nav-text">Dockerfile</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#build-from-Dockerfile"><span class="nav-number">3.</span> <span class="nav-text">build from Dockerfile</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ssh-登陆"><span class="nav-number">4.</span> <span class="nav-text">ssh 登陆</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#删除所有退出的container"><span class="nav-number">5.</span> <span class="nav-text">删除所有退出的container</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -559,6 +739,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -576,6 +760,18 @@
       <script id="dsq-count-scr" src="https://joyee.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://joyeeo.github.io/2022/03/09/docker/';
+          this.page.identifier = '2022/03/09/docker/';
+          this.page.title = 'docker';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://joyee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
